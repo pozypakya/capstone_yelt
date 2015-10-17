@@ -1,9 +1,9 @@
 ---
 title: "Yelp Milestone Report Rubric"
 output:
-  html_document: default
   pdf_document:
     highlight: haddock
+  html_document: default
   word_document: default
 ---
 
