@@ -1,0 +1,3 @@
+"","x"
+"1","HY000 35 [Cloudera][HiveODBC] (35) Error from server: error code: '1' error message: 'Error while processing statement: FAILED: Execution Error, return code 1 from org.apache.hadoop.hive.ql.exec.mr.MapRedTask'."
+"2","[RODBC] ERROR: Could not SQLExecDirect 'select city ,  categories , sum(review_count) as n from business group by city ,  categories order by n desc limit 100 '"

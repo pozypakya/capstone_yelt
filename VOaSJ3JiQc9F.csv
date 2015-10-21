@@ -1,0 +1,31 @@
+"","x"
+"1","HY000 35 [Cloudera][HiveODBC] (35) Error from server: error code: '1' error message: 'Error while processing statement: '/CML/lib/lib/hive-serdes-1.0-SNAPSHOT.jar'; does not exist.'."
+"2","[RODBC] ERROR: Could not SQLExecDirect 'ADD JAR '/CML/lib/lib/hive-serdes-1.0-SNAPSHOT.jar';
+use coursera;
+set mapred.job.priority=VERY_HIGH;
+select 
+regexp_replace(a.votes.funny, '\
+|\','') as votes_funny , 
+regexp_replace(a.votes.useful, '\
+|\','') as votes_useful , 
+regexp_replace(a.votes.cool, '\
+|\','') as votes_cool , 
+a.user_id , a.review_id , 
+a.stars as stars_review , b.stars as stars_business,  
+b.review_count,
+date , regexp_replace(a.text, '\
+|\','') as text ,
+a.type , a.business_id as business_id , regexp_replace(b.full_address, '\
+|\','') as full_address,
+b.hours.sunday as sunday,
+b.hours.monday as monday,
+b.hours.tuesday as tuesday,
+b.hours.wednesday as wednesday,
+b.hours.thursday as thursday,
+b.hours.friday as friday,
+b.hours.saturday as saturday,
+b.categories
+from review a join 
+business b on (a.business_id=b.business_id)
+where b.categories like '%Restaurants%' and b.city like '%Vegas%'
+order by business_id , categories limit 1000 '"

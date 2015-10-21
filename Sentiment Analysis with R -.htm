@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<!-- saved from url=(0033)http://www.ihub.co.ke/blogs/23216 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <link href="http://www.ihub.co.ke/favicon.ico" rel="shortcut icon" type="image/x-icon">
+        <meta name="theme-color" content="#000">
+
+            
+<!-- Place this data between the <head> tags of your website -->
+<meta name="description" content="&amp;nbsp;  What&#39;s Sentiment Analysis and why does it matter?  Sentiment analysis or opinion mining is the computational study of opinions, sentiments and emotions expressed in text. It&#39;s the use of natural language processing, text analysis and computational linguistics to identify and extract subjective information from text.  Sentiment analysis has a multitude of applications. It&#39;s used for social media monitoring, tracking of products reviews , analyzing survey responses and in business analytic...">
+
+<link rel="canonical" href="./Sentiment Analysis with R -_files/Sentiment Analysis with R -.htm">
+
+<meta property="og:image" content="http://www.ihub.co.ke/media/cache/images/e2660c8d40bcdf63df88a08b2fd4eb06.jpg">
+<meta name="twitter:image" content="http://www.ihub.co.ke/media/cache/images/e2660c8d40bcdf63df88a08b2fd4eb06.jpg">
+<meta property="og:image:width" content="983">
+<meta property="og:image:height" content="558">
+
+<!-- Open Graph data -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Sentiment Analysis with R">
+<meta property="og:url" content="http://www.ihub.co.ke/blogs/23216">
+<meta property="og:description" content="&amp;nbsp;  What&#39;s Sentiment Analysis and why does it matter?  Sentiment analysis or opinion mining is the computational study of opinions, sentiments and emotions expressed in text. It&#39;s the use of natural language processing, text analysis and computational linguistics to identify and extract subjective information from text.  Sentiment analysis has a multitude of applications. It&#39;s used for social media monitoring, tracking of products reviews , analyzing survey responses and in business analytic...">
+<meta property="og:site_name" content="IHUB">
+
+<!-- Twitter Card data -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Sentiment Analysis with R">
+<meta name="twitter:description" content="&amp;nbsp;  What&#39;s Sentiment Analysis and why does it matter?  Sentiment analysis or opinion mining is the computational study of opinions, sentiments and emotions expressed in text. It&#39;s the use of natural language processing, text analysis and computational linguistics to identify and extract subjective information from text.  Sentiment analysis has a multitude of applications. It&#39;s used for social media monitoring, tracking of products reviews , analyzing survey responses and in business analytic...">
+<meta name="twitter:site" content="@ihub">
+<meta name="twitter:url" content="http://www.ihub.co.ke/blogs/23216">
+<meta name="twitter:creator" content="@ihub">
+
+
+
+
+        
+                            <link rel="stylesheet" href="http://www.ihub.co.ke/output/css/stylesheet_v1.css">
+            
+            <title>             Sentiment Analysis with R -
+    </title>
+        
+                
+        <!--[if lt IE 9]>
+            <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
+        <![endif]-->
+
+        <script async="" src="./Sentiment Analysis with R -_files/analytics.js"></script><script>
+		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          if (document.location.hostname != '127.0.0.1') {
+              ga('create', 'UA-53839743-1', 'auto');
+              ga('send', 'pageview');
+          }
+		</script>
+        <meta name="google-site-verification" content="y67ZztyNEn0BH_xhWYDBGULrB2VhOzQZYNZ79z45wtw">
+    <script async="" type="text/javascript" src="./Sentiment Analysis with R -_files/count.js"></script><script type="text/javascript" async="" src="./Sentiment Analysis with R -_files/embed.js"></script></head>
+    <body>
+        <div id="wrapper">
+
+            <header>
+
+    
+    <div class="container-fluid main-menu">
+        <nav role="navigation" class="navbar navbar-inverse navbar-fixed-top affix" data-spy="affix" data-offset-top="60">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" data-target="#navbarCollapse" data-toggle="collapse" class="navbar-toggle">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="http://www.ihub.co.ke/" class="navbar-brand">
+                    <img src="./Sentiment Analysis with R -_files/classic-logo.png" alt="iHub Community" class="full-logo">
+                </a>
+            </div>
+            <!-- Collection of nav links, forms, and other content for toggling -->
+            <div id="navbarCollapse" class="collapse navbar-collapse">
+                        <ul class="nav navbar-nav">
+            
+                <li class="first">        <a href="http://www.ihub.co.ke/about">About</a>        
+    </li>
+
+    
+                <li>        <a href="http://www.ihub.co.ke/members/">Community</a>        
+    </li>
+
+    
+                <li>        <a href="http://www.ihub.co.ke/blogs/">Blog</a>        
+    </li>
+
+    
+                <li>        <a href="http://www.ihub.co.ke/events/">Events</a>        
+    </li>
+
+    
+                <li>        <a href="http://www.ihub.co.ke/jobs">Jobs</a>        
+    </li>
+
+    
+                <li>        <a href="http://www.ihub.co.ke/research">Research</a>        
+    </li>
+
+    
+                <li>        <a href="http://www.ihub.co.ke/consulting">Consulting</a>        
+    </li>
+
+    
+                <li>        <a href="http://www.ihub.co.ke/uxlab">UXLab</a>        
+    </li>
+
+    
+                <li class="last">        <a href="http://www.ihub.co.ke/contacts">Contacts</a>        
+    </li>
+
+
+    </ul>
+
+            </div>
+
+            <div class="user-icon">
+                <a href="http://www.ihub.co.ke/private/profile/view"><i class="glyphicon glyphicon-user"></i></a>
+            </div>
+        </nav>
+
+    </div>
+</header>
+
+
+            <div class="content-block">
+                    <div class="new-submenu clearfix">
+
+    <div class="container-fluid seaarch-widget">
+        <form action="http://www.ihub.co.ke/blogs/search" method="GET" id="1513816088">
+            <div class="search-group">
+                <input type="text" name="q" class="form-control" id="search-input" placeholder="" value="">
+                <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
+                <button class="btn btn-close" id="search-close" type="button"><i class="fa fa-close"></i></button>
+            </div>
+        </form>
+    </div>
+
+    <div class="container-fluid submenubox blogs-submenu">
+                <ul class="submenulist">
+            
+                <li class="first">        <a href="http://www.ihub.co.ke/blogs/">All</a>        
+    </li>
+
+    
+                <li>        <a href="http://www.ihub.co.ke/blogs/category/ihub-community">Community</a>        
+    </li>
+
+    
+                <li>        <a href="http://www.ihub.co.ke/blogs/category/ihub-research">Research</a>        
+    </li>
+
+    
+                <li>        <a href="http://www.ihub.co.ke/blogs/category/ihub-consulting">Consulting</a>        
+    </li>
+
+    
+                <li>        <a href="http://www.ihub.co.ke/blogs/category/ihub-uxlab">UX Lab</a>        
+    </li>
+
+    
+                <li class="last">        <a href="http://www.ihub.co.ke/blogs/category/m:lab">m:lab</a>        
+    </li>
+
+
+    </ul>
+
+        <div class="searchmenu">
+            <a href="http://www.ihub.co.ke/blogs/23216#"><i class="fa fa-search"></i></a>
+        </div>
+    </div>
+</div>
+
+            <div class="container-fluid blogs-wrapper">
+            <div class="blog-article clearfix">
+                                    <div class="blog-head-box">
+
+                        <h1 class="main-heading">Sentiment Analysis with R</h1>
+
+                        <div class="meta_wrapper clearfix">
+                            <div class="item-author">By Matt Gathu</div>
+                            <div class="initiative">iHub</div>
+                            <div class="item-pub-date"><i class="fa fa-calendar-o"></i> &nbsp; Published 20 Mar 2015</div>
+                        </div>
+                    </div>
+                
+                <div class="blog-main clearfix">
+                                            <div class="blog-left">
+                            <div class="blog-share">
+                                                                    <span> Share this Article</span>
+                                    <a href="https://www.facebook.com/sharer/sharer.php?u=http://www.ihub.co.ke/blogs/23216" class="sfb modal_dlg" target="_blank"><i class="fa fa-facebook"></i></a>
+                                    <a href="https://twitter.com/intent/tweet?text=Sentiment%20Analysis%20with%20R:%20http://www.ihub.co.ke/blogs/23216/sentiment-analysis-with-r%20via%20@iHub" class="stw modal_dlg" target="_blank"><i class="fa fa-twitter"></i></a>
+                                    <a href="https://plus.google.com/share?url=http://www.ihub.co.ke/blogs/23216/sentiment-analysis-with-r" class="sgp modal_dlg" target="_blank"><i class="fa fa-google-plus"></i></a>
+                                                            </div>
+                            <div class="blog-main-pic">
+                                                                    <img src="./Sentiment Analysis with R -_files/e2660c8d40bcdf63df88a08b2fd4eb06.jpg" alt="Sentiment Analysis with R">
+                                                            </div>
+
+                            <div class="article-content">
+                                <div class="article-content-desc">&nbsp;
+
+What's Sentiment Analysis and why does it matter?
+
+<a href="http://en.wikipedia.org/wiki/Sentiment_analysis">Sentiment analysis</a> or opinion mining is the computational study of opinions, sentiments and emotions expressed in text. It's the use of natural language processing, text analysis and computational linguistics to identify and extract subjective information from text.
+
+Sentiment analysis has a multitude of applications. It's used for social media monitoring, tracking of products reviews , analyzing survey responses and in business analytics. A more concise example of a use case is it's use by finance firms to forecast market movements based on news, blogs and social media sentiment. Sentiment analysis is in demand because of its efficiency – thousands of text documents can be processed for sentiment in seconds, compared to the hours it would take a manual human effort.
+
+A fundamental task in sentiment analysis is polarity detection: the classification of the polarity of a given text, whether the opinion expressed is positive, negative or neutral. So let us explore polarity detection using <a href="http://en.wikipedia.org/wiki/R_(programming_language)">R</a>, a programming language and software environment for statistical computing with a wide application in data analysis.
+
+This approach uses a <a href="http://en.wikipedia.org/wiki/Supervised_learning">supervised learning</a> algorithm to build a classifier that will detect polarity of textual data and classify it as either positive or negative.
+
+It uses an opinionated dataset to train the classifier, data processing techniques to pre-process the textual data and simple rules for categorizing text as positive or negative.
+
+The first step in this approach is get an opinionated dataset for training. In my case I used <a href="http://www.cs.cornell.edu/people/pabo/movie-review-data/">Polarity Data 2.0</a>, an open source dataset of movie reviews by <a href="http://www.cs.cornell.edu/home/llee/opinion-mining-sentiment-analysis-survey.html">Pang and Lee</a>. Below is a code snippet of how to load the data from a file into an R session.
+<a href="http://www.ihub.co.ke/blog/wp-content/uploads/2015/03/snapshot1.jpeg"><img class="alignnone size-medium wp-image-23218" src="./Sentiment Analysis with R -_files/snapshot1-600x150.jpeg" alt="snapshot1" width="600" height="150"></a>
+<a href="http://www.ihub.co.ke/blog/wp-content/uploads/2015/03/snapshot2.jpeg"><img class="alignnone size-medium wp-image-23219" src="./Sentiment Analysis with R -_files/snapshot2-600x142.jpeg" alt="snapshot2" width="600" height="142"></a>
+
+Next is to defined a function that checks the frequency of positive and negative words in a sentence and gives the sentence a score based on their frequencies. The function will also perform data processing to clean up the text data before giving it a score.
+<a href="http://www.ihub.co.ke/blog/wp-content/uploads/2015/03/snapshot3.jpeg"><img class="alignnone size-medium wp-image-23220" src="./Sentiment Analysis with R -_files/snapshot3-487x300.jpeg" alt="snapshot3" width="487" height="300"></a>
+
+We can then use this simple function to score the polarity dataset and use the scores to train the classifier. Essentially it's teaching the classifier to learn to categorize scores as either positive or negative. There are several approaches to classification, here we use a <a href="http://en.wikipedia.org/wiki/Naive_Bayes_classifier">Naive Bayes Classifier</a> but there are other methods such as <a href="http://en.wikipedia.org/wiki/Maximum_entropy">MaxEnt</a> and <a href="http://en.wikipedia.org/wiki/Support_vector_machine">SVM</a>.
+
+<a href="http://www.ihub.co.ke/blog/wp-content/uploads/2015/03/snapshot4.jpeg"><img class="alignnone size-medium wp-image-23221" src="./Sentiment Analysis with R -_files/snapshot4-600x229.jpeg" alt="snapshot4" width="600" height="229"></a>
+
+Now that we have our classifier, we can confidently take it out for a test run.
+
+We use our initial training dataset and see how our classifier performs. The R programming environment allows us to use a <a href="http://en.wikipedia.org/wiki/Confusion_matrix">confusion matrix</a> to compare the output of our classifier to the expected/actual output.
+
+<a href="http://www.ihub.co.ke/blog/wp-content/uploads/2015/03/snapshot5.jpeg"><img class="alignnone size-medium wp-image-23222" src="./Sentiment Analysis with R -_files/snapshot5-600x89.jpeg" alt="snapshot5" width="600" height="89"></a>
+
+<a href="http://www.ihub.co.ke/blog/wp-content/uploads/2015/03/snapshot6.jpeg"><img class="alignnone size-medium wp-image-23223" src="./Sentiment Analysis with R -_files/snapshot6-600x128.jpeg" alt="snapshot6" width="600" height="128"></a>
+
+And there we have it. A simple naive, pun intended, Naive Bayes sentiment analyzer.
+
+We can further build upon this sentiment analyzer to increase it accuracy and efficiency by better classification techniques such as MaxEnt, increasing the polarity dataset used for learning and adding domain specific word lists to specialize the sentiment analyzer e.g. social media datasets if the analyzer is tailored towards social data analysis.
+
+If this post captured your exploratory senses and you would like to explore sentiment analysis more, the code is freely available on <a href="https://github.com/iHub/sentiment-analysis-using-R">github</a>.
+
+&nbsp;
+
+<i>Header image courtesy of </i><a href="http://wordle.net/"><i>wordle</i></a><i>.</i></div>
+                                <div class="disqus-box">
+                                    <div id="disqus_thread"><iframe id="dsq-app1" name="dsq-app1" allowtransparency="true" frameborder="0" scrolling="no" tabindex="0" title="Disqus" width="100%" src="./Sentiment Analysis with R -_files/saved_resource.htm" style="width: 100% !important; border: none !important; overflow: hidden !important; height: 817px !important;" horizontalscrolling="no" verticalscrolling="no"></iframe></div>
+<script type="text/javascript">
+
+	var disqus_shortname = 'ihubcommunity';
+    
+
+	(function() {
+		var s = document.createElement('script'); s.async = true;
+		s.type = 'text/javascript';
+		s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+		(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the &lt;a href="http://disqus.com/?ref_noscript"&gt;comments powered by Disqus.&lt;/a&gt;</noscript>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    
+                                            <div class="blog-right">
+                            <h3 class="blog-right-heading">Latest Blogs</h3>
+<div class="blog-small-list">
+    <div class="blog-small">
+        <a href="http://www.ihub.co.ke/blogs/26096/the-craftsmanship-trainings-professional-practices">
+            <h3>The Craftsmanship Trainings: Professional Practices</h3>
+            <p>Next Thursday, October 29th 2015, iHub Consulting would like to invite you to the next of the Craftsmanship Trainings.&nbsp;Most software development trainings are about...software development— this one is […]</p>
+        </a>
+    </div>
+</div>
+<div class="blog-small-list">
+    <div class="blog-small">
+        <a href="http://www.ihub.co.ke/blogs/26075/recap-craftsmanship-training-tools">
+            <h3>Recap: Craftsmanship Training, Tools</h3>
+            <p>On Thursday, October 8th 2015, iHub Consulting held the first of its Craftsmanship Trainings. We started out with a conversation about 8 months ago: “How can we improve the quality of the software dev […]</p>
+        </a>
+    </div>
+</div>
+<div class="blog-small-list">
+    <div class="blog-small">
+        <a href="http://www.ihub.co.ke/blogs/26050/is-being-good-at-code-design-enough">
+            <h3>Is being good at code/design enough?</h3>
+            <p>[Cross-posted from kirui.co.ke as originally posted by Kennedy Kirui]Is a career in software development lucrative in Kenya? Some would say yes and others would say that it is similar to being a banke […]</p>
+        </a>
+    </div>
+</div>
+<div class="blog-small-list">
+    <div class="blog-small">
+        <a href="http://www.ihub.co.ke/blogs/26044/energycommunityke-meetup-new-developments-in-oil-gas-and-electricity">
+            <h3>#EnergyCommunityKE Meetup: New developments in Oil, Gas and Electricity</h3>
+            <p>You Asked. We listened.We are thrilled to let you know that the Nairobi Negawatt team will be hosting a special meetup featuring top executives from Kenya Power and Lighting, National Oil Corporation  […]</p>
+        </a>
+    </div>
+</div>
+<div class="blog-small-list">
+    <div class="blog-small">
+        <a href="http://www.ihub.co.ke/blogs/26039/tech-user-groups-roundup">
+            <h3>Tech User Groups Roundup</h3>
+            <p>One of the most common requests here at the iHub is for people who would like to learn programming or coding and a few requests from people who want to improve their skills.Had it been anywhere else t […]</p>
+        </a>
+    </div>
+</div>
+<a href="http://www.ihub.co.ke/blogs/" class="blog-backlink">See More</a>
+
+                        </div>
+                                    </div>
+            </div>
+        </div>
+                </div>
+
+            <footer>
+    <div class="footer-container clearfix">
+
+        <div class="col-xs-12 col-md-3">
+            <div class="footer-logo">
+                <div class="col-xs-12 col-lg-4">
+                    <a href="http://ihub.co.ke/">
+                        <img src="./Sentiment Analysis with R -_files/footer-logo.png" alt="iHub" class="foot-logo">
+                    </a>
+                </div>
+                <div class="col-xs-12 col-lg-8 techno">
+                    <div class="footer-tagline uppercase">Technology . innovation . community</div>
+                    <div class="copyright">Copyright © 2015 iHub Nairobi. All rights reserved <br>
+                    Powered by the Community</div>
+                </div>
+                <div class="xj-line"></div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-md-4 contact-max">
+            <div class="footer-contacts uppercase">
+                <p>4th floor, Bishop Magua Centre, Ngong Road, Nairobi Kenya.</p>
+                <p>P.O Box 58275, 00200 <br>Nairobi Kenya.</p>
+                <p>
+                    Email: <a href="mailto:info@ihub.co.ke">info@ihub.co.ke</a>
+                    &nbsp;|&nbsp; <a href="http://www.ihub.co.ke/contacts">VIEW MAP</a>
+                    &nbsp;|&nbsp; <a target="_blank" href="http://goo.gl/8vF8ni">NEWSLETTER SIGNUP</a>
+                </p>
+            </div>
+            <div class="xj-line"></div>
+        </div>
+
+        <div class="col-xs-12 col-md-5">
+
+            <div class="footer-social inlinelist">
+                <h3 class="uppercase">Follow iHub</h3>
+                <ul>
+                    <li><a href="https://www.facebook.com/pages/IHub/104916726273623?fref=ts" target="_blank">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </li>
+                    <li><a href="http://www.twitter.com/iHub" target="_blank">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </li>
+                    <li><a href="https://plus.google.com/u/1/b/110205481031337326623/110205481031337326623/posts" target="_blank">
+                            <i class="fa fa-google-plus"></i>
+                        </a>
+                    </li>
+                    <li><a href="http://www.youtube.com/user/ihubnairobi" target="_blank">
+                            <i class="fa fa-youtube-play"></i>
+                        </a>
+                    </li>
+                    <li><a href="http://www.flickr.com/photos/ihub/" target="_blank">
+                            <i class="fa fa-flickr"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</footer>
+
+
+        </div> <!-- end wrapper -->
+
+        <!-- inject js files -->
+        <script src="./Sentiment Analysis with R -_files/jquery.min.js"></script>
+        <script src="./Sentiment Analysis with R -_files/jquery.min(1).js"></script>
+
+                <script type="text/javascript" src="./Sentiment Analysis with R -_files/javascript.js"></script>
+        
+            <script type="text/javascript">
+/* <![CDATA[ */
+(function(){try{var s,a,i,j,r,c,l=document.getElementsByTagName("a"),t=document.createElement("textarea");for(i=0;l.length-i;i++){try{a=l[i].getAttribute("href");if(a&&a.indexOf("/cdn-cgi/l/email-protection") > -1  && (a.length > 28)){s='';j=27+ 1 + a.indexOf("/cdn-cgi/l/email-protection");if (a.length > j) {r=parseInt(a.substr(j,2),16);for(j+=2;a.length>j&&a.substr(j,1)!='X';j+=2){c=parseInt(a.substr(j,2),16)^r;s+=String.fromCharCode(c);}j+=1;s+=a.substr(j,a.length-j);}t.innerHTML=s.replace(/</g,"&lt;").replace(/>/g,"&gt;");l[i].setAttribute("href","mailto:"+t.value);}}catch(e){}}}catch(e){}})();
+/* ]]> */
+</script>
+
+
+</body></html>

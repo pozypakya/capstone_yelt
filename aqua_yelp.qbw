@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<QueryBuilder productName="Aqua Data Studio" productVersion="16.0.5-9" buildNumber="44007" fileVersion="1.0.0">
+    <workbook>
+        <options useQuoteIdentifiers="false" schemaQualifiedTable="true" dbQualifiedTable="false" autoJoin="false" schemaGrouping="false" showSystemEntities="false" ignoreUnusedEntities="false" maxResults="">
+            <addEntityOptions limitToUserSchema="false" includeTable="true" includeView="false" addSelectColumnOption="None" database="" schema=""/>
+        </options>
+        <dbContexts>
+            <connection path="coursera" pathname="C:\Users\Vanguard\.datastudio\connections\coursera.conn" username="" schema="" database="coursera" host="10.54.1.150" version="0.14" driver="APACHE_HIVE" server="Apache Hive"/>
+            <dbContext schema="" database="coursera"/>
+            <displayContext schema="" database="coursera"/>
+            <queryContext schema="" database="coursera"/>
+        </dbContexts>
+        <sheets selectedSheet="Main" lastDerivedSheetID="0" lastSubquerySheetID="1" lastUnionSheetID="0">
+            <sheet sqlSheetType="Main" name="Main" title="Main" displayIndex="0">
+                <options>
+                    <sqlOption sqlFieldType="Select" name="NONE"/>
+                </options>
+                <decks>
+                    <deck id="Select" show="true" bounds="165,5,1360,30"/>
+                    <deck id="Where" show="true" bounds="5,5,155,59"/>
+                    <deck id="GroupBy" show="true" bounds="5,69,155,59"/>
+                    <deck id="Having" show="true" bounds="5,133,155,59"/>
+                    <deck id="OrderBy" show="true" bounds="5,197,155,59"/>
+                    <deck id="Union" show="true" bounds="5,261,155,59"/>
+                    <deck id="IndexManager" show="false" bounds="0,0,0,0"/>
+                </decks>
+                <layout>
+                    <item type="row">
+                        <children>
+                            <item type="column">
+                                <children>
+                                    <item type="widget" key="Where"/>
+                                    <item type="widget" key="GroupBy"/>
+                                    <item type="widget" key="Having"/>
+                                    <item type="widget" key="OrderBy"/>
+                                    <item type="widget" key="Union"/>
+                                </children>
+                            </item>
+                            <item type="column">
+                                <children>
+                                    <item type="widget" key="Select"/>
+                                    <item type="widget" key="main"/>
+                                </children>
+                            </item>
+                        </children>
+                    </item>
+                </layout>
+                <sqlEntity dbObjectType="Table" name="business" alias="business" schema="" database="coursera">
+                    <uiProperties showNameOnly="false" explicitStateChange="false" bounds="15,7,175,388"/>
+                </sqlEntity>
+                <sqlEntity dbObjectType="Table" name="checkin" alias="checkin" schema="" database="coursera">
+                    <uiProperties showNameOnly="false" explicitStateChange="false" bounds="256,336,175,250"/>
+                </sqlEntity>
+                <sqlEntity dbObjectType="Table" name="tip" alias="tip" schema="" database="coursera">
+                    <uiProperties showNameOnly="false" explicitStateChange="false" bounds="595,322,175,250"/>
+                </sqlEntity>
+                <sqlEntity dbObjectType="Table" name="review" alias="review" schema="" database="coursera">
+                    <uiProperties showNameOnly="false" explicitStateChange="false" bounds="542,20,175,250"/>
+                </sqlEntity>
+                <sqlEntity dbObjectType="Table" name="user" alias="user" schema="" database="coursera">
+                    <uiProperties showNameOnly="false" explicitStateChange="false" bounds="944,147,175,325"/>
+                </sqlEntity>
+                <join operator="=" allRowsFromSource="false" allRowsFromTarget="false">
+                    <source qbObjectType="Column" name="business_id" displayName="business_id" dbObjectType="Column" dbObjectName="business_id" entityAlias="business"/>
+                    <target qbObjectType="Column" name="business_id" displayName="business_id" dbObjectType="Column" dbObjectName="business_id" entityAlias="checkin"/>
+                </join>
+                <join operator="=" allRowsFromSource="false" allRowsFromTarget="false">
+                    <source qbObjectType="Column" name="business_id" displayName="business_id" dbObjectType="Column" dbObjectName="business_id" entityAlias="business"/>
+                    <target qbObjectType="Column" name="business_id" displayName="business_id" dbObjectType="Column" dbObjectName="business_id" entityAlias="tip"/>
+                </join>
+                <join operator="=" allRowsFromSource="false" allRowsFromTarget="false">
+                    <source qbObjectType="Column" name="business_id" displayName="business_id" dbObjectType="Column" dbObjectName="business_id" entityAlias="business"/>
+                    <target qbObjectType="Column" name="business_id" displayName="business_id" dbObjectType="Column" dbObjectName="business_id" entityAlias="review"/>
+                </join>
+                <join operator="=" allRowsFromSource="false" allRowsFromTarget="false">
+                    <source qbObjectType="Column" name="user_id" displayName="user_id" dbObjectType="Column" dbObjectName="user_id" entityAlias="review"/>
+                    <target qbObjectType="Column" name="user_id" displayName="user_id" dbObjectType="Column" dbObjectName="user_id" entityAlias="user"/>
+                </join>
+                <sqlField sqlFieldType="Select" displayName="business.*">
+                    <queryObject qbObjectType="AllColumns" name="business" displayName="business.*" dbObjectType="Table" dbObjectName="business" entityAlias="business"/>
+                </sqlField>
+                <sqlField sqlFieldType="Select" displayName="checkin.*">
+                    <queryObject qbObjectType="AllColumns" name="checkin" displayName="checkin.*" dbObjectType="Table" dbObjectName="checkin" entityAlias="checkin"/>
+                </sqlField>
+                <sqlField sqlFieldType="Select" displayName="tip.*">
+                    <queryObject qbObjectType="AllColumns" name="tip" displayName="tip.*" dbObjectType="Table" dbObjectName="tip" entityAlias="tip"/>
+                </sqlField>
+                <sqlField sqlFieldType="Select" displayName="review.*">
+                    <queryObject qbObjectType="AllColumns" name="review" displayName="review.*" dbObjectType="Table" dbObjectName="review" entityAlias="review"/>
+                </sqlField>
+                <sqlField sqlFieldType="Select" displayName="user.*">
+                    <queryObject qbObjectType="AllColumns" name="user" displayName="user.*" dbObjectType="Table" dbObjectName="user" entityAlias="user"/>
+                </sqlField>
+            </sheet>
+            <sheet sqlSheetType="Subquery" name="Subquery_1" title="Subquery_1" displayIndex="1">
+                <options>
+                    <sqlOption sqlFieldType="Select" name="NONE"/>
+                </options>
+                <decks>
+                    <deck id="Select" show="true" bounds="165,5,1360,30"/>
+                    <deck id="Where" show="true" bounds="5,5,155,59"/>
+                    <deck id="GroupBy" show="true" bounds="5,69,155,59"/>
+                    <deck id="Having" show="true" bounds="5,133,155,59"/>
+                    <deck id="OrderBy" show="true" bounds="5,197,155,59"/>
+                    <deck id="Union" show="true" bounds="5,261,155,59"/>
+                    <deck id="IndexManager" show="false" bounds="0,0,0,0"/>
+                </decks>
+                <layout>
+                    <item type="row">
+                        <children>
+                            <item type="column">
+                                <children>
+                                    <item type="widget" key="Where"/>
+                                    <item type="widget" key="GroupBy"/>
+                                    <item type="widget" key="Having"/>
+                                    <item type="widget" key="OrderBy"/>
+                                    <item type="widget" key="Union"/>
+                                </children>
+                            </item>
+                            <item type="column">
+                                <children>
+                                    <item type="widget" key="Select"/>
+                                    <item type="widget" key="main"/>
+                                </children>
+                            </item>
+                        </children>
+                    </item>
+                </layout>
+            </sheet>
+        </sheets>
+        <window height="1044" width="1928" x="-4" y="-4" showDataPane="true" dataPaneSheetProportions="0.20">
+            <dataPaneHeights>
+                <height>48</height>
+                <height>224</height>
+                <height>224</height>
+                <height>224</height>
+                <height>228</height>
+            </dataPaneHeights>
+            <worksheetContainer diagramResultProportions="0.75"/>
+        </window>
+    </workbook>
+</QueryBuilder>

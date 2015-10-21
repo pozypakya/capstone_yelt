@@ -1,0 +1,25 @@
+"","business_id","full_address","hours","open","categories","city","review_count","name","neighborhoods","longitude","state","stars","latitude","attributes","type"
+"1","vcNAWiLM4dR7D2nwwJ7nCA","4840 E Indian School Rd
+Ste 101
+Phoenix, AZ 85018",NA,1,"[Doctors, Health & Medical]","Phoenix",9,"Eric Goldberg, MD","[]",-111.983758,"AZ",3.5,33.499313,"{""delivery"":null,""parking"":null,""take_out"":null}","business"
+"2","UsFtqoBl7naz8AVUBZMjQQ","202 McClure St
+Dravosburg, PA 15034",NA,1,"[Nightlife]","Dravosburg",4,"Clancy's Pub","[]",-79.88693,"PA",3.5,40.350519,"{""delivery"":null,""parking"":null,""take_out"":null}","business"
+"3","cE27W9VPgO88Qxe4ol6y_g","1530 Hamilton Rd
+Bethel Park, PA 15234",NA,0,"[Active Life, Mini Golf, Golf]","Bethel Park",5,"Cool Springs Golf Center","[]",-80.01591,"PA",2.5,40.3568962,"{""delivery"":null,""parking"":null,""take_out"":null}","business"
+"4","HZdLhv6COCleJMo7nPl-RA","301 S Hills Vlg
+Pittsburgh, PA 15241","{""sunday"":{""close"":""18:00"",""open"":""11:00""},""monday"":{""close"":""21:00"",""open"":""10:00""},""tuesday"":{""close"":""21:00"",""open"":""10:00""},""wednesday"":{""close"":""21:00"",""open"":""10:00""},""thursday"":{""close"":""21:00"",""open"":""10:00""},""friday"":{""close"":""21:00"",""open"":""10:0",1,"[Shopping, Home Services, Internet Service Providers, Mobile Phones, Professional Services, Electronics]","Pittsburgh",3,"Verizon Wireless","[]",-80.05998,"PA",3.5,40.35762,"{""delivery"":null,""parking"":null,""take_out"":null}","business"
+"5","mVHrayjG3uZ_RLHkLj-AMg","414 Hawkins Ave
+Braddock, PA 15104",NA,1,"[Bars, American (New), Nightlife, Lounges, Restaurants]","Braddock",11,"Emil's Lounge","[]",-79.8663507,"PA",4.5,40.408735,"{""delivery"":""false"",""parking"":""{garage=false, street=false, validated=false, lot=false, valet=false}"",""take_out"":null}","business"
+"6","KayYbHCt-RkbGcPdGOThNg","141 Hawthorne St
+Greentree
+Carnegie, PA 15106",NA,1,"[Bars, American (Traditional), Nightlife, Restaurants]","Carnegie",15,"Alexion's Bar & Grill","[""Greentree""]",-80.067534,"PA",4,40.415517,"{""delivery"":""false"",""parking"":""{garage=false, street=false, validated=false, lot=true, valet=false}"",""take_out"":null}","business"
+"7","b12U9TFESStdy7CsTtcOeg","718 Hope Hollow Rd
+Carnegie, PA 15106",NA,1,"[Auto Repair, Automotive]","Carnegie",5,"Flynn's E W Tire Service Center","[]",-80.0844539,"PA",1.5,40.394588,"{""delivery"":null,""parking"":null,""take_out"":null}","business"
+"8","Sktj1eHQFuVa-M4bgnEh8g","920 Forsythe Rd
+Carnegie
+Carnegie, PA 15106",NA,1,"[Active Life, Mini Golf]","Carnegie",4,"Forsythe Miniature Golf & Snacks","[""Carnegie""]",-80.0762665,"PA",4,40.4054039,"{""delivery"":null,""parking"":null,""take_out"":null}","business"
+"9","3ZVKmuK2l7uXPE6lXY4Dbg","8 Logan St
+Carnegie
+Carnegie, PA 15106",NA,1,"[Home Services, Contractors]","Carnegie",3,"Quaker State Construction","[""Carnegie""]",-80.090357,"PA",2.5,40.406324,"{""delivery"":null,""parking"":null,""take_out"":null}","business"
+"10","wJr6kSA5dchdgOdwH6dZ2w","2100 Washington Pike
+Carnegie, PA 15106","{""sunday"":{""close"":""02:00"",""open"":""08:00""},""monday"":{""close"":""02:00"",""open"":""08:00""},""tuesday"":{""close"":""02:00"",""open"":""08:00""},""wednesday"":{""close"":""02:00"",""open"":""08:00""},""thursday"":{""close"":""02:00"",""open"":""08:00""},""friday"":{""close"":""02:00"",""open"":""08:0",1,"[Burgers, Breakfast & Brunch, American (Traditional), Restaurants]","Carnegie",8,"Kings Family Restaurant","[]",-80.0928745,"PA",3.5,40.3877323,"{""delivery"":""false"",""parking"":""{garage=false, street=false, validated=false, lot=false, valet=false}"",""take_out"":null}","business"
