@@ -1,9 +1,9 @@
 ---
 title: "Yelp Milestone Report Rubric"
 output:
-  html_document: default
   pdf_document:
     highlight: haddock
+  html_document: default
   word_document: default
 ---
 
@@ -42,10 +42,11 @@ try.error = function(x)
 }
 
 
-library(ggplot2)
-library(xlsx)
-library(sentiment)
-library(wordcloud)
+suppressWarnings(suppressMessages(library(ggplot2)))
+suppressWarnings(suppressMessages(library(xlsx)))
+suppressWarnings(suppressMessages(library(sentiment)))
+suppressWarnings(suppressMessages(library(wordcloud)))
+suppressWarnings(suppressMessages(library(RODBC)))
 
 setwd("D:/Google Drive/Coursera/capstone_yelt")
 RndStr <- function(n = 1, lenght = 12)
@@ -61,9 +62,15 @@ return(randomString)
 }
 
 ```
+```r
+http://www.r-bloggers.com/using-sentiment-analysis-to-predict-ratings-of-popular-tv-series/
+http://i2.wp.com/statofmind.files.wordpress.com/2014/05/rating_all_series.png
+Kena buat sentimen score
+Data dalam nie
+C:\Program Files\R\R-3.2.1\library\sentiment\data\emotions.csv
+```
 
 ```{r}
-library(RODBC)
 conn <- odbcConnect(dsn = "capstone", uid = "hdfs", pwd = "")
 sqlQuery(conn, "ADD JAR /CML/lib/lib/hive-serdes-1.0-SNAPSHOT.jar;")
 sqlQuery(conn, "set mapred.job.priority='VERY_HIGH';")
@@ -73,7 +80,7 @@ conn, "select a.user_id, a.date ,
 regexp_replace(a.`text`, '\\\n|\\\r','') as review,
 regexp_replace(b.`text`, '\\\n|\\\r','') as tips
 from review a left join tip b on (a.business_id=b.business_id) and (a.date=b.date) and (a.user_id=b.user_id)
-where a.business_id = '4bEjOyTaDG24SY5TxsaUNQ'")
+where a.business_id = '4bEjOyTaDG24SY5TxsaUNQ' order by rand() limit 100")
 odbcClose(conn)
 head(df)
 #write.csv(queryResult,paste(RndStr(),".csv",sep = ""))
@@ -91,7 +98,7 @@ df = as.data.frame(sapply(df, try.error))
 df = as.data.frame(df[!is.na(df)])
 names(df) = "review"
 
-class_emo = classify_emotion(df, algorithm="bayes", prior=1.0)
+class_emo = classify_emotion(df, algorithm="bayes", prior=1.0 )
 emotion = class_emo[,7]
 emotion[is.na(emotion)] = "unknown"
 class_pol = classify_polarity(df, algorithm="bayes")
@@ -102,6 +109,7 @@ polarity = class_pol[,4]
 sent_df = data.frame(text=df, emotion=emotion,
 polarity=polarity, stringsAsFactors=FALSE)
 
+# Sorting
 sent_df = within(sent_df,
   emotion <- factor(emotion, levels=names(sort(table(emotion), decreasing=TRUE))))
   
@@ -109,12 +117,12 @@ sent_df = within(sent_df,
 ggplot(sent_df, aes(x=emotion)) +
     geom_bar(aes(y=..count.., fill=emotion)) +
     scale_fill_brewer(palette="Dark2") +
-    labs(x="emotion categories", y="number of tweets") 
+    labs(x="emotion categories", y="number of messages") 
 	
 ggplot(sent_df, aes(x=polarity)) +
     geom_bar(aes(y=..count.., fill=polarity)) +
     scale_fill_brewer(palette="RdGy") +
-    labs(x="polarity categories", y="number of tweets") 	
+    labs(x="polarity categories", y="number of messages") 	
 	
 emos = levels(factor(sent_df$emotion))
 nemo = length(emos)
@@ -134,8 +142,8 @@ tdm = as.matrix(tdm)
 colnames(tdm) = emos
 
 # comparison word cloud
-comparison.cloud(tdm, colors = brewer.pal(nemo, "Dark2"),
-   scale = c(3,.5), random.order = FALSE, title.size = 1.5)
+suppressWarnings(suppressMessages(comparison.cloud(tdm, colors = brewer.pal(nemo, "Dark2"),
+   scale = c(3,.5), random.order = FALSE, title.size = 1.5)))
 
 ``` 
 
