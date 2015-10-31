@@ -1,0 +1,399 @@
+---
+title: The Sentimen Evaluation of Customer Ratings & Review Restaurants in Las Vegas
+  City'
+author: "Pozy Pak Ya"
+date: "October 22, 2015"
+output:
+  html_document:
+    toc: yes
+  pdf_document:
+    toc: yes
+  word_document:
+    fig_caption: yes
+fontsize: 10pt
+documentclass: article
+classoption: a3paper
+---
+
+
+```{r , echo=FALSE}
+
+suppressWarnings(suppressMessages(library(ggplot2)))
+suppressWarnings(suppressMessages(library(xlsx)))
+suppressWarnings(suppressMessages(library(sentiment)))
+suppressWarnings(suppressMessages(library(wordcloud)))
+suppressWarnings(suppressMessages(library(RODBC)))
+suppressWarnings(suppressMessages(library(pander)))
+suppressWarnings(suppressMessages(library(ggmap)))
+suppressWarnings(suppressMessages(library(RColorBrewer)))
+suppressWarnings(suppressMessages(library(Rstem)))
+suppressWarnings(suppressMessages(library(tm)))
+suppressWarnings(suppressMessages(library(NLP)))
+suppressWarnings(suppressMessages(library(rmarkdown)))
+suppressWarnings(suppressMessages(library(gridExtra)))
+suppressWarnings(suppressMessages(library(Rmisc)))
+suppressWarnings(suppressMessages(library(png)))
+suppressWarnings(suppressMessages(library(grid)))
+
+
+```
+
+# Introduction - A description of the question/problem and the rationale for studying it
+
+The evaluation is about the sentimen analysis over the review and stars rating restaurant in Last Vegas city.. The YELP dataset is very resouceful which provides the valuable criteria over 61,184  unique records for `business` , 1,569,264 records for `reviews` and 495,107 records for the `tips`. 2 tables been discarded for now which is `user` details and the `checkin` information.The GPS longitute and latitude available inside the `business` dataset which provides very useful information about its geolocation. The stars value gives the feedback from the customer which might be `positive` , `negative` or `neutral`.
+The findings offer exemplary `big data` analysis methods as the evaluation of socially mediated urban space associated with the pattern classification of textual information inside the `reviews` and `tips` in relation with `business` dataset.
+
+```{r , echo=FALSE }
+df <- read.csv("a.csv")
+#df <-
+#sqlQuery(
+#conn, "select  review_count , categories , city from business group by review_count , categories , city order by review_count desc")
+```
+
+From the total sample inside business dataset , Las Vegas City is the top 5 location with the most review counted as follows :-
+
+
+```{r echo=FALSE}
+panderOptions("digits", 2)
+pander(head(df),caption = "Top 5 City Reviews and Categories")
+
+```
+
+The similarities between the business types is the keyword `Restaurant`
+
+# Methods and Data - Describe how you used the data and the type of analytic methods that you used; it's okay to be a bit technical here but clarity is important
+
+The dataset is gained from the YELP website (http://www.yelp.com/dataset_challenge) and extracted. The format for the dataset is in `JSON` . JSON need special techniques to parse and read from it. Apache Hive is the best component which is capable read this format . Since the dataset required to have a good machine in term of CPU and memory , we push this dataset to work inside Hadoop which Map-Reduce can be used as the framework for the filtering and cleaning over large size of the dataset. Hive is compatible to use scripting parameter similar to SQL and this is very suitable for speed up the entire development work. Hive also support for the complex data type and  `STRUCT` is used to handle the JSON complex type for the table creation inside Hive .
+
+4.  Method Used -  Classification , Bayes
+
+# Results - Describe what you found through your analysis of the data.
+
+
+```{r , echo=FALSE }
+df <- read.csv("b.csv")
+df1 <- df
+df1$name <- NULL
+df1$city <- NULL
+df1$categories <- NULL
+df1$cc <- NULL
+df1$gog <- NULL
+df1$alcohol <- NULL
+summary(df1$review_count)
+
+```
+
+To reduce the size of the sample , average size of numbers of message is the minimal size which is around 390. And the numbers of group identified around 1000 
+
+From the summary show that the Median is `26` and we choose `26` as the minimal sample for this evaluation. The median better than mean because of it is a symmetrical statistic and more resistant to errors.
+
+```{r echo=FALSE , fig.height=3 , fig.align='center'}
+
+df <- read.csv("b.csv") 
+df1 <- df
+df1$name <- NULL
+df1$city <- NULL
+df1$categories <- NULL
+df1$cc <- NULL
+df1$gog <- NULL
+df1$alcohol <- NULL
+#df1$review_count
+#df1$longitude <- NULL
+#df1$latitude <- NULL
+#df1$cc <- as.numeric(as.factor(df1$cc))
+#df1$cc[is.na(df1$cc)] <- 0
+
+#df1$gog <- as.numeric(as.factor(df1$gog))
+#df1$gog[is.na(df1$gog)] <- 0
+
+#df1$alcohol <- as.numeric(as.factor(df1$alcohol))
+#df1$alcohol[is.na(df1$alcohol)] <- 0
+
+#(kc <- kmeans(df1,14)) 
+#plot(df1[c("latitude", "longitude")], col=kc$cluster)
+
+
+mapImageData1 <-
+  suppressWarnings(suppressMessages(get_map(
+  location = c(lon = mean(df1$longitude), lat = mean(df1$latitude)),
+  maptype = "roadmap" , color = "bw",
+  zoom = 13
+  )))
+  lon <- data.frame(df1$longitude)
+  lat <- data.frame(df1$latitude)
+  f <- data.frame(df1$review_count)
+  mydf <- as.data.frame(cbind(lon,lat,f))
+  names(mydf) = c("lon","lat","review")
+  mapImageData1 <-
+  get_map(
+  location = c(lon = mean(df1$longitude), lat = mean(df1$latitude)),
+  maptype = "roadmap" , color = "bw",
+  zoom = 13
+  )
+```
+xxx
+
+```{r echo=FALSE , fig.height=5 , fig.width=10 , fig.align='center'}
+  p <-
+  ggmap(mapImageData1) + geom_point(data = mydf, aes(
+  x = lon,y = lat , color = review ,size = review ,alpha = 0.2
+  )) + ggtitle('Review Dispersion Size Location') 
+  p
+  
+```
+Figure 1 : Venue with greater than 390 review messages
+
+Bagitau list of restaurant yang banyak impact dan types of food yang ada sesama mereka kalau ada relationship
+
+The population is because the location is very strategic and nearest to the airport
+
+Figure 2 : Venue with greater than 390 review messages
+
+* Sentiment Analysis
+
+Positive correlated with the positive emotion words
+
+Figure 3 : Venue with weighted by the numbers of keywords
+
+Sentiment analysis on keyword left 70% of the dataset with neutral sentiment.
+Sentiment was found to be 74% positive in nature which corresponds to about 22% of the total sample
+In contrast,26% was negative in nature which corresponds to only 8% of the total sample
+
+Figure 4 : Venue with weighted by the numbers of keywords , with positive weight
+Figure 5 : Venue with weighted by the numbers of keywords , with negative weight
+Figure 6 : Total sentiment classification with positive , negative and neutral
+Figure 7 : Cloudwords postive and negative
+
+* Temporal Analysis
+
+Figure 8 : Duration - Negative vs Positive + Neutral
+Figure 9 : Comparison by month
+
+# Discussion - Explain how you interpret the results of your analysis and what the implications are for your question/problem.
+
+The issues raise a significant question
+* 
+
+
+```{r , echo=FALSE}
+df <- read.csv("d.csv") 
+#suppressWarnings(suppressMessages(odbcClose(conn)))
+
+```
+
+The `HEAD` records for business types , average ratings and the average review count as follows :
+
+
+```{r pander,echo=FALSE}
+panderOptions("digits", 2)
+pander(head(df),caption = "Las Vegas City Restaurant")
+
+```
+
+Is there any relation between the business type ?
+
+
+```{r , echo=FALSE}
+df <- read.csv("e.csv") 
+#suppressWarnings(suppressMessages(odbcClose(conn)))
+
+df_review <- as.data.frame(tolower(df$review))
+df_review <-as.data.frame(sapply(df_review,gsub,pattern="[[:digit:]]",replacement=""))
+df_review <-as.data.frame(sapply(df_review,gsub,pattern="[[:punct:]]",replacement=""))
+df_review <-as.data.frame(sapply(df_review,gsub,pattern="@\\w+",replacement=""))
+df_review <-as.data.frame(sapply(df_review,gsub,pattern="^\\s+|\\s+$",replacement=""))
+df_review <-as.data.frame(sapply(df_review,gsub,pattern="[ \t]{2,}",replacement=""))
+names(df_review) = "review"
+
+df_tips <- as.data.frame(tolower(df$tips))
+df_tips <-as.data.frame(sapply(df_tips,gsub,pattern="[[:digit:]]",replacement=""))
+df_tips <-as.data.frame(sapply(df_tips,gsub,pattern="[[:punct:]]",replacement=""))
+df_tips <-as.data.frame(sapply(df_tips,gsub,pattern="@\\w+",replacement=""))
+df_tips <-as.data.frame(sapply(df_tips,gsub,pattern="^\\s+|\\s+$",replacement=""))
+df_tips <-as.data.frame(sapply(df_tips,gsub,pattern="[ \t]{2,}",replacement=""))
+#df_tips = as.data.frame(sapply(df_tips, try.error))
+#df_tips = as.data.frame(df_tips[!is.na(df)])
+names(df_tips) = "tips"
+
+```
+
+The `HEAD` records for business types , average ratings and the average review count as follows :
+
+
+```{r echo=FALSE}
+#panderOptions("digits", 2)
+#pander(head(df),caption = "Las Vegas City Restaurant")
+
+#================================================================================================
+# Messages
+#================================================================================================
+
+class_emo = classify_emotion(df_review, algorithm="bayes", prior=1.0)
+emotion = class_emo[,7]
+emotion[is.na(emotion)] = "unknown"
+class_pol = classify_polarity(df_review, algorithm="bayes")
+# get polarity best fit
+polarity = class_pol[,4]
+
+# data frame with results
+sent_df = data.frame(text=df_review, emotion=emotion,
+polarity=polarity, stringsAsFactors=FALSE)
+
+sent_df = within(sent_df,
+  emotion <- factor(emotion, levels=names(sort(table(emotion), decreasing=TRUE))))
+
+df_df_review_combined <- cbind(df,sent_df)
+
+```
+
+```{r echo=FALSE , fig.height=3 , fig.width=12 , fig.align='center' }
+
+a <- ggplot(sent_df, aes(x = emotion)) +
+  geom_bar(aes(y = ..count.., fill = emotion)) +
+  scale_fill_brewer(palette = "Dark2") +
+  labs(x = "emotion categories", y = "number of review messages")+ labs(title =
+  "Las Vegas Restaurant Review Emotion ")
+
+b <- ggplot(sent_df, aes(x = polarity)) +
+  geom_bar(aes(y = ..count.., fill = polarity)) +
+  scale_fill_brewer(palette = "RdGy") +
+  labs(x = "polarity categories", y = "number of review messages") + labs(title =
+  "Las Vegas Restaurant Review Connotation Polarity")
+
+multiplot(a,b,cols = 2)
+
+emos = levels(factor(sent_df$emotion))
+nemo = length(emos)
+emo.docs = rep("", nemo)
+for (i in 1:nemo)
+{
+   tmp = df$review[emotion == emos[i]]
+   emo.docs[i] = paste(tmp, collapse=" ")
+}
+
+# remove stopwords
+emo.docs = removeWords(emo.docs, stopwords("english"))
+# create corpus
+corpus = Corpus(VectorSource(emo.docs))
+tdm_review = TermDocumentMatrix(corpus)
+tdm_review = as.matrix(tdm_review)
+colnames(tdm_review) = emos
+
+# comparison word cloud
+suppressWarnings(suppressMessages(comparison.cloud(tdm_review, colors = brewer.pal(nemo, "Dark2"),
+   scale = c(1,.5), random.order = FALSE, title.size = 1.5)))
+
+```
+
+Tips
+
+```{r echo=FALSE , fig.height=3 , fig.align='center'}
+class_emo = classify_emotion(df_tips, algorithm="bayes", prior=1.0)
+emotion = class_emo[,7]
+emotion[is.na(emotion)] = "unknown"
+class_pol = classify_polarity(df_tips, algorithm="bayes")
+# get polarity best fit
+polarity = class_pol[,4]
+
+# data frame with results
+sent_df = data.frame(text=df_tips, emotion=emotion,
+polarity=polarity, stringsAsFactors=FALSE)
+
+sent_df = within(sent_df,
+  emotion <- factor(emotion, levels=names(sort(table(emotion), decreasing=TRUE))))
+
+df_df_tips_combined <- cbind(df,sent_df)
+
+```
+
+Cerita techniques yang dipakai di sini
+
+```{r echo=FALSE , fig.height=3 , fig.width=12 , fig.align='center' }
+a <- ggplot(sent_df, aes(x = emotion)) +
+  geom_bar(aes(y = ..count.., fill = emotion)) +
+  scale_fill_brewer(palette = "Dark2") +
+  labs(x = "emotion categories", y = "number of tips messages")+ labs(title =
+  "Las Vegas Restaurant Tips Emotion ")
+
+b <- ggplot(sent_df, aes(x = polarity)) +
+  geom_bar(aes(y = ..count.., fill = polarity)) +
+  scale_fill_brewer(palette = "RdGy") +
+  labs(x = "polarity categories", y = "number of tips messages") + labs(title =
+  "Las Vegas Restaurant Tips Connotation Polarity")
+
+
+emos = levels(factor(sent_df$emotion))
+nemo = length(emos)
+emo.docs = rep("", nemo)
+for (i in 1:nemo)
+{
+   tmp = df$review[emotion == emos[i]]
+   emo.docs[i] = paste(tmp, collapse=" ")
+}
+
+# remove stopwords
+emo.docs = removeWords(emo.docs, stopwords("english"))
+# create corpus
+corpus = Corpus(VectorSource(emo.docs))
+tdm_tips = TermDocumentMatrix(corpus)
+tdm_tips = as.matrix(tdm_tips)
+colnames(tdm_tips) = emos
+
+# comparison word cloud
+
+multiplot(a,b,cols = 2)
+
+#png(filename="cloud1.png")
+suppressWarnings(suppressMessages(comparison.cloud(tdm_tips, colors = brewer.pal(nemo, "Dark2"),
+   scale = c(4,.5), random.order = FALSE, title.size = 1.5)))
+#dev.off()
+
+#img <-  readPNG("cloud1.png")
+
+```
+
+# Food and Mood
+
+This analysis is to find out are there any recommendation types of food based on the mood of the customer. We need to find out what kind of food is the top 500 keyword that the all the reviewer always mention about. The approaches is by desingning the wordcloud and choose the common food appear inside it. The result as follows :-
+
+```{r echo=FALSE , fig.height=3 , fig.width=12 , fig.align='center' }
+df_review <- read.csv("f.csv")
+df_review <- df_review$review
+df_review <-as.data.frame(sapply(df_review,gsub,pattern="[[:digit:]]",replacement=""))
+df_review <-as.data.frame(sapply(df_review,gsub,pattern="[[:punct:]]",replacement=""))
+df_review <-as.data.frame(sapply(df_review,gsub,pattern="@\\w+",replacement=""))
+df_review <-as.data.frame(sapply(df_review,gsub,pattern="^\\s+|\\s+$",replacement=""))
+df_review <-as.data.frame(sapply(df_review,gsub,pattern="[ \t]{2,}",replacement=""))
+names(df_review) = "review"
+
+# create a corpus
+mach_corpus = Corpus(VectorSource(df_review))
+
+# create document term matrix applying some transformations
+tdm = TermDocumentMatrix(mach_corpus,
+   control = list(removePunctuation = TRUE,
+   stopwords = c("machine", "learning", stopwords("english")),
+   removeNumbers = TRUE, tolower = TRUE))
+
+# define tdm as matrix
+m = as.matrix(tdm)
+# get word counts in decreasing order
+word_freqs = sort(rowSums(m), decreasing=TRUE) 
+# create a data frame with words and their frequencies
+dm = data.frame(word=names(word_freqs), freq=word_freqs)
+
+suppressWarnings(suppressMessages(wordcloud(dm$word[1:500], dm$freq[1:500], random.order=FALSE, colors=brewer.pal(8, "Dark2"))))
+```
+
+The result shows that the common food that always appear by the reviewer is `chicken` , `sushi` , `burger` , `pizza` , `cheese` , `salad` , `rice` and `sauce`. We use this list as the base of common food to relate with the mood of the reviewer.
+
+So, we interested with the food type listed and we want to have some idea what are their possible relationship . To achive this , is to use the `word-graph` techniques as follows :-
+
+```{r echo=FALSE , fig.height=3 , fig.width=12 , fig.align='center' }
+
+```
+
+
+https://sites.google.com/site/miningtwitter/questions/talking-about/given-topic
+
+

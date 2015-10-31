@@ -7,23 +7,15 @@ output:
   word_document: default
 ---
 
-The goal of this task is to write a report that can be used as the basis for a final product or perhaps a submission to the Yelp dataset challenge. In addition, you need to create a 5-slide deck using RStudio Presenter tools to describe and promote your analysis. 
-
-# Report
-
-Write a 5-page report using R Markdown that describes your question/problem, how you used the dataset, the analysis you conducted, and the conclusions that you drew from the analysis. Your report must have the following sections clearly labelled:
-
 # Title - A brief description of what you've done
 
-* Introduction - A description of the question/problem and the rationale for studying it
+# Introduction - A description of the question/problem and the rationale for studying it
 
-* Methods and Data - Describe how you used the data and the type of analytic methods that you used; it's okay to be a bit technical here but clarity is important
+# Methods and Data - Describe how you used the data and the type of analytic methods that you used; it's okay to be a bit technical here but clarity is important
 
-* Results - Describe what you found through your analysis of the data.
+# Results - Describe what you found through your analysis of the data.
 
-* Discussion - Explain how you interpret the results of your analysis and what the implications are for your question/problem.
-
-The final report must be in PDF format using standard page sizes. Please be considerate with respect to using readable font sizes and page margins.
+# Discussion - Explain how you interpret the results of your analysis and what the implications are for your question/problem.
 
 
 ```{r}
@@ -48,7 +40,7 @@ suppressWarnings(suppressMessages(library(sentiment)))
 suppressWarnings(suppressMessages(library(wordcloud)))
 suppressWarnings(suppressMessages(library(RODBC)))
 
-setwd("D:/Google Drive/Coursera/capstone_yelt")
+#setwd("D:/Google Drive/Coursera/capstone_yelt")
 RndStr <- function(n = 1, lenght = 12)
 {
 randomString <- c(1:n) # initialize vector
@@ -68,6 +60,7 @@ http://i2.wp.com/statofmind.files.wordpress.com/2014/05/rating_all_series.png
 Kena buat sentimen score
 Data dalam nie
 C:\Program Files\R\R-3.2.1\library\sentiment\data\emotions.csv
+https://sites.google.com/site/miningtwitter/questions/sentiment/sentiment
 ```
 
 ```{r}
@@ -98,7 +91,6 @@ df = as.data.frame(sapply(df, try.error))
 df = as.data.frame(df[!is.na(df)])
 names(df) = "review"
 
-class_emo = classify_emotion(df, algorithm="bayes", prior=1.0 )
 emotion = class_emo[,7]
 emotion[is.na(emotion)] = "unknown"
 class_pol = classify_polarity(df, algorithm="bayes")

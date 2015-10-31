@@ -1,0 +1,82 @@
+---
+title: "The Sentimen Evaluation of Customer Review in Las Vegas City Restaurants"
+author: "Pozy Pak Ya"
+date: "October 22, 2015"
+output:
+  word_document:
+    fig_caption: yes
+    highlight: monochrome
+  html_document: default
+documentclass: article
+classoption: a3paper
+---
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+summary(cars)
+summary(airquality)
+```
+
+You can also embed plots, for example:
+
+```{r echo=FALSE}
+library(png)
+png(height=600, width=600, pointsize=20, file="abc.png")
+plot(cars)
+dev.off()
+
+```
+
+```{r echo=FALSE , fig.width = 10, fig.height = 6 , message=F, warning=F}
+library(png)
+png(height=300, width=300, pointsize=15, file="def.png")
+plot(airquality)
+dev.off()
+
+
+img1 <- readPNG('abc.png')
+h<-dim(img1)[1]
+w<-dim(img1)[2]
+#plot(img1)
+
+img2 <- readPNG('def.png')
+h<-dim(img2)[1]
+w<-dim(img2)[2]
+#plot(img2)
+
+img3 <- readPNG('cloud1.png')
+h<-dim(img3)[1]
+w<-dim(img3)[2]
+
+#library("fields")
+library("gridExtra")
+
+#par(mfrow = c(1,2))
+#plot(img1)
+#plot(img2)
+#plot(grid::grid.raster(img3))
+#grid.arrange(img3, img3, ncol=2)
+#a <- rasterImage(img1, 100, 300, 150, 350, interpolate = FALSE)
+#plot(img1,useRaster=TRUE)
+#grid::grid.raster(img1)
+#img2 <- readPNG('def.png')
+#b <- rasterImage(img2, 100, 300, 150, 350, interpolate = FALSE)
+#img1
+library("png")
+library("raster")
+#dev.new(width=5, height=2)
+plot(0:2, 0:2, type = "n", xaxt = "n", yaxt = "n", xlab = "", ylab = "")
+rasterImage(readPNG(source="abc.png"), 0, 1, 1, 2)
+rasterImage(readPNG(source="cloud1.png"), 1, 1, 2, 2)
+#rasterImage(readPNG(source="def.png"), 0, 0, 1, 1)
+#rasterImage(readPNG(source="cloud1.png"), 1, 0, 2, 1)
+
+```
+
+
+
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
