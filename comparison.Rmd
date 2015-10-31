@@ -285,7 +285,7 @@ The lexicon is in English and the reference for the `positive` and `negative` wo
 
 The results from the all analysis we can summarized by plotting the dispersion of the message size inside the map of Las Vegas restaurant. We the conclusion , we find out that the message is more focus in the area of  `Fountains of Bellagio` along the `S Las Vegas Blvd` road. This road is the main highway in Las Vegas and there is a lot of casinos along it. The illustration below :-
 
-```{r echo=FALSE , fig.height=4 , fig.width=5 , message=F, warning=F}
+```{r echo=FALSE , fig.height=4 ,  fig.align='center', message=F, warning=F}
 
 df <- read.csv("b.csv") 
 df1 <- df
@@ -329,28 +329,22 @@ mapImageData1 <-
   zoom = 13
   )))
 
-  par(mfrow = c(1,2))
+  #par(mfrow = c(1,2))
   p <-
   suppressWarnings(ggmap(mapImageData1)) + suppressWarnings(geom_point(data = mydf, aes(
   x = lon,y = lat , color = review ,size = review ,alpha = 0.2
-  ))) + ggtitle('Review Size Dispersion by Location') 
-  suppressWarnings(p)
+  ))) + ggtitle('Last Vegas Review HeatMap') + geom_point(aes(x=-115.1725885,y=36.11295248),col='red',size=30,shape=1)
   suppressWarnings(p)
   
 ```
-Figure 1 : Venue with greater than 390 review messages
+
+-115.1725885	36.11295248
 
 Bagitau list of restaurant yang banyak impact dan types of food yang ada sesama mereka kalau ada relationship
 
 The population is because the location is very strategic and nearest to the airport
 
-Figure 2 : Venue with greater than 390 review messages
-
-* Sentiment Analysis
-
-Positive correlated with the positive emotion words
-
-Figure 3 : Venue with weighted by the numbers of keywords
+The review is not adil because of focus only to the one places - which is the heart of Last Vegas
 
 Sentiment analysis on keyword left 70% of the dataset with neutral sentiment.
 Sentiment was found to be 74% positive in nature which corresponds to about 22% of the total sample
@@ -360,18 +354,10 @@ Figure 4 : Venue with weighted by the numbers of keywords , with positive weight
 Figure 5 : Venue with weighted by the numbers of keywords , with negative weight
 Figure 6 : Total sentiment classification with positive , negative and neutral
 Figure 7 : Cloudwords postive and negative
-
-* Temporal Analysis
-
 Figure 8 : Duration - Negative vs Positive + Neutral
 Figure 9 : Comparison by month
 
-
-4.  Method Used -  Classification , Bayes
-
-
-
-Is there any relation between the business type ?
+The Method Used -  Classification , Bayes
 
 
 ```{r echo=FALSE , fig.height=3 , fig.align='center' , message=F, warning=F}
