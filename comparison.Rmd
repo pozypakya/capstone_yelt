@@ -9,7 +9,7 @@ output:
     fig_caption: yes
 fontsize: 10pt
 documentclass: article
-classoption: a3paper
+classoption: a4paper
 ---
 
 # Abstract 
@@ -546,8 +546,16 @@ suppressWarnings(suppressMessages(comparison.cloud(tdm_tips, colors = brewer.pal
 
 ```
 
+DISCUSSION 
+The issue of using such data in a real planning situation raises several significant questions: 1) how to determine the extent of limited demographic information, data frequency, and the privacy concerns of Twitter users, 2) accessing and processing increasingly larger data, and 3) assuring a sample's diversity. In response, we believe that the three analysis techniques described above suggests that: 1) Big Data can become a robust tool, 2) Density can be coupled with temporal patterns to reveal dynamic sentiment monitored city wide offering detailed views of social trends. For issues related to better informed decision making, characterizing urban areas is essential. Through the union of data and location as exemplified in this study, multiple layers of realtime information can be displayed geographically, providing enhanced situational contexts and the deciphering of evolving social narratives. Odendaal (2006) acknowledges this premise, suggesting a growing movement in urban planning to utilize city narratives in the process of understanding place. The paper suggests that public life within digital social networks can tell an exceptionally well documented story.
+
 In our experiment, we mapped the star ratings down to simplified 1 and 0 values, to signify a sharp polarity between positive and negative reviews. Initially, we had hoped to work towards a model that allowed us to make an entirely quantitative star rating measure of a review. We can design our model to better capture this information. We can also include more data by factoring in the three ratings per review provided by
 Yelp.
+
+We have presented 3 algorithms chosen for their simplicity of implementation and run time efficiency. The results suggest that our classification-based approach performs better than numeric or ordinal regression approaches. Our next step is to verify these results with the more advanced algorithms outlined below.1. For many numeric regression problems, (boosted) classification trees have shown good performance.2. Several multi-threshold implementations of
+Support Vector Ordinal Regression are compared in Chu and Keerthi (2005). While they are more principled than the Perceptron-based PRank, their implementation is significantly more complex. A simpler approach that performs regression using a single classifier extracts extended examples from the original examples (Li and Lin, 2007). 3. Among classification-based approaches, nested binary classifiers have been proposed (Frank and Hall, 2001) to take into account the ordering information, but the prediction procedure based on classifier score difference is ad-hoc.
+
+Textual reviews for different products and services are abundant. Still, when trying to make a buy decision, getting sufficient and reliable information can be a daunting task. In this work, instead of a single overall rating we focus on providing ratings for multiple aspects of the product/service. Since most textual reviews are rarely accompanied by multiple aspect ratings, such ratings must be deduced from predictive models. Several authors in the past have studied this problem using both classification and regression models. In this work we show that even though the aspect rating problem seems like a regression problem, maximum entropy classification models perform the best. Results also show a strong inter-dependence in the way users rate different aspects.
 
 https://sites.google.com/site/miningtwitter/questions/talking-about/given-topic
 
