@@ -14,8 +14,8 @@ classoption: a4paper
 
 # Abstract 
 
-*From recent trends, many online reviews include a numerical or star rating that quantifies the satisfaction of the reviewer's experience. However, an
-objective mapping of this quantitative rating to the reviewer's textual description does not yet exist. In this paper, we explore models ranging from support vector machines to learning word vectors that capture the sentiment information of individual words in relation to ratings of an entire document. We use Yelp reviews for restaurants near particular universities to predict corresponding star ratings per review.*
+*Online review becoming so important for business nowadays. Every review can affect the products buying power or services provided, including the ratings, which can quantify the satisfaction of the reviewer's experience.The source of the information mainly coming from the reviewers comments and the tip which contain resourceful textual information which been entered into the website or portal. In this paper, we evaluate the textual information from the YELP review dataset and try discover the hidden pattern or message inside it. We applied a machine learning techniques such as `Naive Bayes` to learn from the word vector which capture the sentiment from each reviewer in relation with other factor from the dataset. We mainly focus our discovery towards the reviews of the restaurant in major area of Las Vegas.*
+
 
 # Keywords
 Urban design, social media, geo-location, lexicographic analysis, sentiment analysis
@@ -161,7 +161,7 @@ table(as.data.frame(class_pol)$BEST_FIT) / length(as.data.frame(class_pol)$BEST_
 
 To discover what types of food been reviewed most by the reviewer , `word-cloud` plot is used to splot the word frequencies. Since to have the food-list dataset is hard to compile due to there is a lot of food around the world , by plotting it into word cloud we easily can identify manually pick the food that we recognize as follows :- 
 
-```{r echo=FALSE , fig.height=3 , fig.width=3 , fig.align='center' , message=F, warning=F}
+```{r echo=FALSE , fig.height=3 , fig.align='center' , message=F, warning=F}
 df_review <- read.csv("f.csv")
 df_review <- df_review$review
 df_review <-as.data.frame(sapply(df_review,gsub,pattern="[[:digit:]]",replacement=""))
@@ -283,7 +283,7 @@ The lexicon is in English and the reference for the `positive` and `negative` wo
 
 # Results
 
-The results from the all analysis we can summarized by plotting the dispersion of the message size inside the map of Las Vegas restaurant. We the conclusion , we find out that the message is more focus in the area of  `Fountains of Bellagio` along the `S Las Vegas Blvd` road. This road is the main highway in Las Vegas and there is a lot of casinos along it. The illustration below :-
+The results from the analysis we can summarize by plotting the `heatmap` of the message size inside the map of Las Vegas restaurant. We concluded that the message is more focus in the area of  `Fountains of Bellagio` along the `S Las Vegas Blvd` road. This road is the main highway in Las Vegas and there is a lot of casinos along it. The illustration below shows the findings  :-
 
 ```{r echo=FALSE , fig.height=4 ,  fig.align='center', message=F, warning=F}
 
@@ -338,26 +338,10 @@ mapImageData1 <-
   
 ```
 
--115.1725885	36.11295248
+The red area is the central area of the review messages. Major comments all over the year since 2004 is focused in that area. The location seems very strategic and it is only 2.5 miles from the `McCarran International Airport`. Most people will stay in this area and enjoyed the food before they have their flight or after they arrive here.
 
-Bagitau list of restaurant yang banyak impact dan types of food yang ada sesama mereka kalau ada relationship
-
-The population is because the location is very strategic and nearest to the airport
-
-The review is not adil because of focus only to the one places - which is the heart of Last Vegas
-
-Sentiment analysis on keyword left 70% of the dataset with neutral sentiment.
-Sentiment was found to be 74% positive in nature which corresponds to about 22% of the total sample
-In contrast,26% was negative in nature which corresponds to only 8% of the total sample
-
-Figure 4 : Venue with weighted by the numbers of keywords , with positive weight
-Figure 5 : Venue with weighted by the numbers of keywords , with negative weight
-Figure 6 : Total sentiment classification with positive , negative and neutral
-Figure 7 : Cloudwords postive and negative
-Figure 8 : Duration - Negative vs Positive + Neutral
-Figure 9 : Comparison by month
-
-The Method Used -  Classification , Bayes
+From the analysis ,  found that 70% of the dataset with neutral sentiment.
+Sentiment was found to be 74% positive in nature which corresponds to about 22% of the total sample In contrast,26% was negative in nature which corresponds to only 8% of the total sample .A `Naive Bayes` algorithm classifies each review message into subjectivity and polarity from the input. A subjectivity indicates the words are strongly or weakly subjective and the polarity indicates the weather the words are expressing a positive or negative sentiment. The illustration below shows the summary:-
 
 
 ```{r echo=FALSE , fig.height=3 , fig.align='center' , message=F, warning=F}
@@ -384,10 +368,8 @@ names(df_tips) = "tips"
 
 ```
 
-The `HEAD` records for business types , average ratings and the average review count as follows :
 
-
-```{r echo=FALSE , fig.height=3 , fig.width=9 ,  message=F, warning=F}
+```{r echo=FALSE , fig.height=3 , fig.width=10 ,  message=F, warning=F}
 #panderOptions("digits", 2)
 #pander(head(df),caption = "Las Vegas City Restaurant")
 
@@ -434,115 +416,41 @@ a <- ggplot(sent_df, aes(x = emotion)) +
   geom_bar(aes(y = ..count.., fill = emotion)) +
   scale_fill_brewer(palette = "Dark2") +
   labs(x = "emotion", y = "# review")+ labs(title =
-  "  L.V Review Emotion ")
+  "  Las Vegas Review Emotion ")
 
 b <- ggplot(sent_df, aes(x = polarity)) +
   geom_bar(aes(y = ..count.., fill = polarity)) +
   scale_fill_brewer(palette = "RdGy") +
   labs(x = "polarity", y = "# review") + labs(title =
-  "  L.V Connotation Polarity")
+  "  Las Vegas Connotation Polarity")
 
 #par(mfrow = c(1))
 
-
-
-```
-
-```{r echo=FALSE , fig.height=3 , fig.width=5 ,  message=F, warning=F}
-
 multiplot(a,b,cols = 2)
 suppressWarnings(suppressMessages(comparison.cloud(tdm_review, colors = brewer.pal(nemo, "Dark2"),
-   scale = c(1,.5), random.order = FALSE, title.size = 1.5)))
-
-```
-
-Tips
-
-```{r echo=FALSE , fig.height=3 , fig.width=5 ,  message=F, warning=F}
-class_emo = classify_emotion(df_tips, algorithm="bayes", prior=1.0)
-emotion = class_emo[,7]
-emotion[is.na(emotion)] = "unknown"
-class_pol = classify_polarity(df_tips, algorithm="bayes")
-# get polarity best fit
-polarity = class_pol[,4]
-
-# data frame with results
-sent_df = data.frame(text=df_tips, emotion=emotion,
-polarity=polarity, stringsAsFactors=FALSE)
-
-sent_df = within(sent_df,
-  emotion <- factor(emotion, levels=names(sort(table(emotion), decreasing=TRUE))))
-
-df_df_tips_combined <- cbind(df,sent_df)
-
-```
-
-Cerita techniques yang dipakai di sini
-
-```{r echo=FALSE , fig.height=3 , fig.width=5 ,  message=F, warning=F}
-a <- ggplot(sent_df, aes(x = emotion)) +
-  geom_bar(aes(y = ..count.., fill = emotion)) +
-  scale_fill_brewer(palette = "Dark2") +
-  labs(x = "emotion", y = "# tips")+ labs(title =
-  "  L.V Tips Emotion ")
-
-b <- ggplot(sent_df, aes(x = polarity)) +
-  geom_bar(aes(y = ..count.., fill = polarity)) +
-  scale_fill_brewer(palette = "RdGy") +
-  labs(x = "polarity", y = "# tips") + labs(title =
-  "  L.V Tips Polarity")
-
-
-emos = levels(factor(sent_df$emotion))
-nemo = length(emos)
-emo.docs = rep("", nemo)
-for (i in 1:nemo)
-{
-   tmp = df$review[emotion == emos[i]]
-   emo.docs[i] = paste(tmp, collapse=" ")
-}
-
-# remove stopwords
-emo.docs = removeWords(emo.docs, stopwords("english"))
-# create corpus
-corpus = Corpus(VectorSource(emo.docs))
-tdm_tips = TermDocumentMatrix(corpus)
-tdm_tips = as.matrix(tdm_tips)
-colnames(tdm_tips) = emos
-
-# comparison word cloud
-
-multiplot(a,b,cols = 2)
-
-#png(filename="cloud1.png")
-suppressWarnings(suppressMessages(comparison.cloud(tdm_tips, colors = brewer.pal(nemo, "Dark2"),
-   scale = c(4,.5), random.order = FALSE, title.size = 1.5)))
-#dev.off()
-
-#img <-  readPNG("cloud1.png")
+   scale = c(1,.5), random.order = FALSE, title.size = 1.5 ) ))
 
 ```
 
 # Discussion 
 
 
-
-
 ```{r echo=FALSE , fig.height=3 , fig.align='center' , message=F, warning=F}
 
 ```
 
-DISCUSSION 
-The issue of using such data in a real planning situation raises several significant questions: 1) how to determine the extent of limited demographic information, data frequency, and the privacy concerns of Twitter users, 2) accessing and processing increasingly larger data, and 3) assuring a sample's diversity. In response, we believe that the three analysis techniques described above suggests that: 1) Big Data can become a robust tool, 2) Density can be coupled with temporal patterns to reveal dynamic sentiment monitored city wide offering detailed views of social trends. For issues related to better informed decision making, characterizing urban areas is essential. Through the union of data and location as exemplified in this study, multiple layers of realtime information can be displayed geographically, providing enhanced situational contexts and the deciphering of evolving social narratives. Odendaal (2006) acknowledges this premise, suggesting a growing movement in urban planning to utilize city narratives in the process of understanding place. The paper suggests that public life within digital social networks can tell an exceptionally well documented story.
+The issue of using such real data in this  situation raises several significant questions such as :- 
 
-In our experiment, we mapped the star ratings down to simplified 1 and 0 values, to signify a sharp polarity between positive and negative reviews. Initially, we had hoped to work towards a model that allowed us to make an entirely quantitative star rating measure of a review. We can design our model to better capture this information. We can also include more data by factoring in the three ratings per review provided by
-Yelp.
+1)  How to determine the extent of limited demographic information, data frequency, the privacy concerns of Yelp users and harsh message that might be censored by YELP administration.
+2)  Accessing and processing method due to increasingly for larger datasets. Some algorithm like Random Forest required high iteration and processing. 
+3)  Assuring a sample's diversity by implementing feature selection and optimal ratio selection for training and testing dataset for prediction in the future.
+4)  Authentication or validation of the reviewer's identity, to reduce or eliminate bias in the reviewer comments so all the information is genuinely entered and the analysis result can be trusted.
 
-We have presented 3 algorithms chosen for their simplicity of implementation and run time efficiency. The results suggest that our classification-based approach performs better than numeric or ordinal regression approaches. Our next step is to verify these results with the more advanced algorithms outlined below.1. For many numeric regression problems, (boosted) classification trees have shown good performance.2. Several multi-threshold implementations of
-Support Vector Ordinal Regression are compared in Chu and Keerthi (2005). While they are more principled than the Perceptron-based PRank, their implementation is significantly more complex. A simpler approach that performs regression using a single classifier extracts extended examples from the original examples (Li and Lin, 2007). 3. Among classification-based approaches, nested binary classifiers have been proposed (Frank and Hall, 2001) to take into account the ordering information, but the prediction procedure based on classifier score difference is ad-hoc.
+We believe that the three analysis techniques can be improved by suggestion below :-
 
-Textual reviews for different products and services are abundant. Still, when trying to make a buy decision, getting sufficient and reliable information can be a daunting task. In this work, instead of a single overall rating we focus on providing ratings for multiple aspects of the product/service. Since most textual reviews are rarely accompanied by multiple aspect ratings, such ratings must be deduced from predictive models. Several authors in the past have studied this problem using both classification and regression models. In this work we show that even though the aspect rating problem seems like a regression problem, maximum entropy classification models perform the best. Results also show a strong inter-dependence in the way users rate different aspects.
+1)  How Big Data can help the analysis as a robust tool to support the high volume dataset for better analysis results.
+2)  How the selection of strategic location can be correlated with the review pattern in order to reveal the dynamic sentiment in social trends.
+3)  How the star ratings provided can be mapped to the analysis, which allows to make the analysis model is entirely in qualitative measure. By adding the polarity between the positive and negative also can improve the model.
 
-https://sites.google.com/site/miningtwitter/questions/talking-about/given-topic
 
-
+Textual reviews dataset in YELP dataset for different products and services is still abundant. The task needed in getting sufficient and reliable information can become a daunting task. In the future, we will incorporate to include the analysis using both classification and regression model for better predictive analytics. We might find a better and stronger interdependence in the way of the user ratings in different aspects.
