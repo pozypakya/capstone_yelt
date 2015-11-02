@@ -106,7 +106,7 @@ For the basic analysis , this evaluation requires a fair amount time to know abo
 * What is the emotion type that might contain inside the review and tips messages ?
 * What is the most frequent words or terms inside it ?
 
-Below is the answers for the questions above . Top common words inside the review is regarding the `good food , good places and also a good services `. Reviewers whom visits seems very happy about the quality of food , services and places restaurant in Las Vegas. Most of the comments seems positively accepts it.
+Below is the answers for the questions above . Top common words inside the review is regarding the `good food , good places` and also a `good services `. Reviewers whom visits seems very happy about the quality of food , services and places restaurant in Las Vegas. Most of the comments seems positively accepts it.
 
 ```{r echo=FALSE ,  fig.align='center' ,   fig.height=4 , fig.width=8 ,  message=F, warning=F}
 df_review <- read.csv("f.csv")
@@ -157,7 +157,7 @@ table(as.data.frame(class_pol)$BEST_FIT) / length(as.data.frame(class_pol)$BEST_
 
 ```
 
-* Food Selection Discovery
+* Food Selection  & Emotion Discovery 
 
 To discover what types of food been reviewed most by the reviewer , `word-cloud` plot is used to splot the word frequencies. Since to have the food-list dataset is hard to compile due to there is a lot of food around the world , by plotting it into word cloud we easily can identify manually pick the food that we recognize as follows :- 
 
@@ -190,82 +190,81 @@ dm = data.frame(word=names(word_freqs), freq=word_freqs)
 suppressWarnings(suppressMessages(wordcloud(dm$word[1:500], dm$freq[1:500], random.order=FALSE, colors=brewer.pal(8, "Dark2"))))
 ```
 
-From the above information we can make the assumption that the result shows the common food that always mention by the reviewer are `chicken` , `sushi` , `burger` , `pizza` , `cheese` , `salad` , `rice` and `sauce`. We use this list as the base of common food can be relate with the emotion of the reviewer. List of emotion that can be identified , such as `friendly` , `best` , `well` , and `nice` .
-So, we entrusted with the food type listed and we want to have some idea what are their possible relationship . To achieve this , is to use the `word-graph` techniques for 8 groups of food  and the result as follows :-
+From the above information we can make the assumption that the result shows the common food that always mention by the reviewer are `chicken` , `sushi` , `burger` , `pizza` , `tuna` , `salad` , `rice` ,  `shrip` , etc. We use this list as the base of common food can be relate with the emotion of the reviewer. List of emotions that can be identified, such as `love`, `good`, `best`, `great`, `nice`, etc. Seems like this kind of food appear many times and the Last Vegas visitors or reviewer pretty happy with it. Some class type of food origin found in the list such as `Italian`, `Japanese` and `American` cuisine. 
 
 ```{r echo=FALSE , fig.height=5 , fig.align='center' , message=F, warning=F}
 
-df_review <- read.csv("g.csv",header = TRUE)
-df_review <- as.data.frame(tolower(df_review$review))
-names(df_review) = "review"
-df_review <-as.data.frame(sapply(df_review,gsub,pattern="[[:digit:]]",replacement=""))
-df_review <-as.data.frame(sapply(df_review,gsub,pattern="[[:punct:]]",replacement=""))
-df_review <-as.data.frame(sapply(df_review,gsub,pattern="@\\w+",replacement=""))
-df_review <-as.data.frame(sapply(df_review,gsub,pattern="^\\s+|\\s+$",replacement=""))
-df_review <-as.data.frame(sapply(df_review,gsub,pattern="[ \t]{2,}",replacement=""))
+# df_review <- read.csv("g.csv",header = TRUE)
+# df_review <- as.data.frame(tolower(df_review$review))
+# names(df_review) = "review"
+# df_review <-as.data.frame(sapply(df_review,gsub,pattern="[[:digit:]]",replacement=""))
+# df_review <-as.data.frame(sapply(df_review,gsub,pattern="[[:punct:]]",replacement=""))
+# df_review <-as.data.frame(sapply(df_review,gsub,pattern="@\\w+",replacement=""))
+# df_review <-as.data.frame(sapply(df_review,gsub,pattern="^\\s+|\\s+$",replacement=""))
+# df_review <-as.data.frame(sapply(df_review,gsub,pattern="[ \t]{2,}",replacement=""))
 #df_review <-as.data.frame(sapply(df_review,gsub,pattern="\\:",replacement=""))
 #df_review <- as.data.frame(df_review$review[1:10])
-names(df_review) = "review"
-
-corpus = Corpus(VectorSource(df_review))
-skipwords = c(stopwords("english"), 
-   "chicken", "sushi", "burger", "pizza", "cheese", "salad", "rice", "sauce")
-corpus = tm_map(corpus, removeWords, skipwords)
-# term-document matrix
-tdm = TermDocumentMatrix(corpus)
-#tdm <- removeSparseTerms(tdm, sparse= 0.7)
-# convert tdm to matrix
-m = as.matrix(tdm)
-# word counts
-wc = rowSums(m)
-
-# get those words above the 3rd quantile
-lim = quantile(wc, probs=0.5)
-good = m[wc > lim,]
-
-# adjacency matrix
-M = good %*% t(good)
-
-# set zeroes in diagonal
-diag(M) = 0
-
-# graph
-g = graph.adjacency(M, weighted=TRUE, mode="undirected",add.rownames=TRUE)
-# layout
-glay = layout.fruchterman.reingold(g)
-
-# let's superimpose a cluster structure with k-means clustering
-kmg = kmeans(M, centers=8)
-gk = kmg$cluster
-
-# create nice colors for each cluster
-gbrew = c("red", brewer.pal(8, "Dark2"))
-gpal = rgb2hsv(col2rgb(gbrew))
-gcols = rep("", length(gk))
-for (k in 1:8) {
-gcols[gk == k] = hsv(gpal[1,k], gpal[2,k], gpal[3,k], alpha=0.5)
-}
-
-# prepare ingredients for plot
-V(g)$size = 10
-V(g)$label = V(g)$name
-V(g)$degree = degree(g)
-#V(g)$label.cex = 1.5 * log10(V(g)$degree)
-V(g)$label.color = hsv(0, 0, 0.2, 0.55)
-V(g)$frame.color = NA
-V(g)$color = gcols
-E(g)$color = hsv(0, 0, 0.7, 0.3)
-
-# plot
-plot(g, layout=glay)
-title("\nLast Vegas Restaurant Food Graph",
-col.main="gray40", cex.main=1.5)
-
-chars_per_tweet = sapply(as.vector(df_review$review), nchar)
-
+# names(df_review) = "review"
+# 
+# corpus = Corpus(VectorSource(df_review))
+# skipwords = c(stopwords("english"), 
+#    "chicken", "sushi", "burger", "pizza", "cheese", "salad", "rice", "sauce")
+# corpus = tm_map(corpus, removeWords, skipwords)
+# # term-document matrix
+# tdm = TermDocumentMatrix(corpus)
+# #tdm <- removeSparseTerms(tdm, sparse= 0.7)
+# # convert tdm to matrix
+# m = as.matrix(tdm)
+# # word counts
+# wc = rowSums(m)
+# 
+# # get those words above the 3rd quantile
+# lim = quantile(wc, probs=0.5)
+# good = m[wc > lim,]
+# 
+# # adjacency matrix
+# M = good %*% t(good)
+# 
+# # set zeroes in diagonal
+# diag(M) = 0
+# 
+# # graph
+# g = graph.adjacency(M, weighted=TRUE, mode="undirected",add.rownames=TRUE)
+# # layout
+# glay = layout.fruchterman.reingold(g)
+# 
+# # let's superimpose a cluster structure with k-means clustering
+# kmg = kmeans(M, centers=8)
+# gk = kmg$cluster
+# 
+# # create nice colors for each cluster
+# gbrew = c("red", brewer.pal(8, "Dark2"))
+# gpal = rgb2hsv(col2rgb(gbrew))
+# gcols = rep("", length(gk))
+# for (k in 1:8) {
+# gcols[gk == k] = hsv(gpal[1,k], gpal[2,k], gpal[3,k], alpha=0.5)
+# }
+# 
+# # prepare ingredients for plot
+# V(g)$size = 10
+# V(g)$label = V(g)$name
+# V(g)$degree = degree(g)
+# #V(g)$label.cex = 1.5 * log10(V(g)$degree)
+# V(g)$label.color = hsv(0, 0, 0.2, 0.55)
+# V(g)$frame.color = NA
+# V(g)$color = gcols
+# E(g)$color = hsv(0, 0, 0.7, 0.3)
+# 
+# # plot
+# plot(g, layout=glay)
+# title("\nLast Vegas Restaurant Food Graph",
+# col.main="gray40", cex.main=1.5)
+# 
+# chars_per_tweet = sapply(as.vector(df_review$review), nchar)
+# The graph shows that there is a few groups of words which their possible relationship and have the idea of the main term used.
 ```
 
-The graph shows that there is a few groups of words which their possible relationship and have the idea of the main term used.
+
 
 Other interesting findings in this evaluation is to classify the reviewers ratings and the tips provided. The idea is to calculate the sentimen score for each messages so we can know how positive and negative the messages. Below is the formula of the how to calculate the score :-
 
@@ -277,7 +276,7 @@ Other interesting findings in this evaluation is to classify the reviewers ratin
 * If the `score < 0` , the messages has overall `negative` opinion
 * If the `score = 0` , the messages has can be consider as `neutral` opinion
 
-The lexicon is in English and the reference for the `positive` and `negative` words is reference from  (https://github.com/SamPortnow/Depression_Prevention_Program/tree/master/bato/assets).
+The lexicon is in English and the reference to the `positive` and `negative` words is referred from  (https://github.com/SamPortnow/Depression_Prevention_Program/tree/master/bato/assets).
 
 
 
@@ -285,7 +284,7 @@ The lexicon is in English and the reference for the `positive` and `negative` wo
 
 The results from the analysis we can summarize by plotting the `heatmap` of the message size inside the map of Las Vegas restaurant. We concluded that the message is more focus in the area of  `Fountains of Bellagio` along the `S Las Vegas Blvd` road. This road is the main highway in Las Vegas and there is a lot of casinos along it. The illustration below shows the findings  :-
 
-```{r echo=FALSE , fig.height=4 ,  fig.align='center', message=F, warning=F}
+```{r echo=FALSE , fig.height=3 ,  fig.align='center', message=F, warning=F}
 
 df <- read.csv("b.csv") 
 df1 <- df
@@ -338,10 +337,11 @@ mapImageData1 <-
   
 ```
 
-The red area is the central area of the review messages. Major comments all over the year since 2004 is focused in that area. The location seems very strategic and it is only 2.5 miles from the `McCarran International Airport`. Most people will stay in this area and enjoyed the food before they have their flight or after they arrive here.
+The red area is the central area of the review messages is focusing on. Major comments all over the year since 2004 is focused in that area. The location seems very strategic and it is only 2.5 miles from the `McCarran International Airport`. Most people will stay in this area and enjoyed the food before they have their flight or after they arrive here.
 
-From the analysis ,  found that 70% of the dataset with neutral sentiment.
-Sentiment was found to be 74% positive in nature which corresponds to about 22% of the total sample In contrast,26% was negative in nature which corresponds to only 8% of the total sample .A `Naive Bayes` algorithm classifies each review message into subjectivity and polarity from the input. A subjectivity indicates the words are strongly or weakly subjective and the polarity indicates the weather the words are expressing a positive or negative sentiment. The illustration below shows the summary:-
+From the random sample of the Las Vegas dataset which taken 10% of the total sample for analysis, we found that more than 70% are happy `(joy)` emotion with the services, smaller portion are unhappy `(sadness, anger, fear)` emotion. The `(unknown)` emotion still needs deeper analysis to increase accuracy of the emotion classification.This smaller sample used due to limitation of machine memory to process
+
+A `Naive Bayes` algorithm classifies each review message into subjectivity and polarity from the input. A subjectivity indicates the words are strongly or weakly subjective and the polarity indicates the weather the words are expressing a positive or negative sentiment. The illustration & table below shows the summary:-
 
 
 ```{r echo=FALSE , fig.height=3 , fig.align='center' , message=F, warning=F}
@@ -410,7 +410,21 @@ tdm_review = TermDocumentMatrix(corpus)
 tdm_review = as.matrix(tdm_review)
 colnames(tdm_review) = emos
 
+p <- as.data.frame(class_emo)
 
+p$ANGER <- as.double(format(p$ANGER,digits=2))
+p$DISGUST <- as.double(format(p$DISGUST,digits=2))
+p$FEAR <- as.double(format(p$FEAR,digits=2))
+p$JOY <- as.double(format(p$JOY,digits=2))
+p$SADNESS <- as.double(format(p$SADNESS,digits=2))
+#p$SURPRISE <- as.double(format(p$SURPRISE,digits=2))
+p$SURPRISE <- NULL
+
+panderOptions("digits", 3)
+pander(head(p),caption = "Sample of Emotion Classification Table")
+
+#panderOptions("digits", 2)
+#pander(head(tdm_review),caption = "Las Vegas City Restaurant")
 
 a <- ggplot(sent_df, aes(x = emotion)) +
   geom_bar(aes(y = ..count.., fill = emotion)) +
@@ -441,16 +455,16 @@ suppressWarnings(suppressMessages(comparison.cloud(tdm_review, colors = brewer.p
 
 The issue of using such real data in this  situation raises several significant questions such as :- 
 
-1)  How to determine the extent of limited demographic information, data frequency, the privacy concerns of Yelp users and harsh message that might be censored by YELP administration.
-2)  Accessing and processing method due to increasingly for larger datasets. Some algorithm like Random Forest required high iteration and processing. 
+1)  How to determine the extent of limited demographic information, data frequency, the privacy concerns of Yelp users and `harsh` message that might be censored by YELP administration.
+2)  Accessing and processing method due to increasingly for larger datasets. Some algorithm like `Random Forest` required high iteration and processing. 
 3)  Assuring a sample's diversity by implementing feature selection and optimal ratio selection for training and testing dataset for prediction in the future.
 4)  Authentication or validation of the reviewer's identity, to reduce or eliminate bias in the reviewer comments so all the information is genuinely entered and the analysis result can be trusted.
 
-We believe that the three analysis techniques can be improved by suggestion below :-
+We believe that the analysis techniques can be improved by three suggestions below :-
 
-1)  How Big Data can help the analysis as a robust tool to support the high volume dataset for better analysis results.
+1)  How `BigData` can help the analysis as a robust tool to support the high volume dataset for better and faster analysis results.
 2)  How the selection of strategic location can be correlated with the review pattern in order to reveal the dynamic sentiment in social trends.
-3)  How the star ratings provided can be mapped to the analysis, which allows to make the analysis model is entirely in qualitative measure. By adding the polarity between the positive and negative also can improve the model.
+3)  How the star ratings provided can be mapped to the analysis, which allows to make the analysis model is entirely in qualitative measure. By adding the polarity between the positive and negative , which believe can improve the model accuracy and performance.
 
 
-Textual reviews dataset in YELP dataset for different products and services is still abundant. The task needed in getting sufficient and reliable information can become a daunting task. In the future, we will incorporate to include the analysis using both classification and regression model for better predictive analytics. We might find a better and stronger interdependence in the way of the user ratings in different aspects.
+Textual reviews dataset in YELP dataset for different products and services is still abundant. The task needed in getting sufficient and reliable information can become a daunting task. In the future, we will incorporate to include the analysis using both classification and regression model for better predictive analytics. We might find a better and stronger interdependence in the way of the user ratings in different aspects.Finally, the current evaluation and the analysis are reproducible due to the dataset is available to download and all the source code which involved is publicly shared via the GitHub website (https://github.com/pozypakya/capstone_yelt.git)
