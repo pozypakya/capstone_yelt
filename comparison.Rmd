@@ -14,11 +14,11 @@ classoption: a4paper
 
 # Abstract 
 
-*Online review becoming so important for business nowadays. Every review can affect the products buying power or services provided, including the ratings, which can quantify the satisfaction of the reviewer's experience.The source of the information mainly coming from the reviewers comments and the tip which contain resourceful textual information which been entered into the website or portal. In this paper, we evaluate the textual information from the YELP review dataset and try discover the hidden pattern or message inside it. We applied a machine learning techniques such as `Naive Bayes` to learn from the word vector which capture the sentiment from each reviewer in relation with other factor from the dataset. We mainly focus our discovery towards the reviews of the restaurant in major area of Las Vegas.*
+*Online review becoming so important for business nowadays. Every review can affect the products buying power or services provided, including the ratings, which can quantify the satisfaction of the reviewer's experience.The source of the information mainly coming from the reviewers' comments and the tip which contain resourceful textual information which been entered into the website or portal. In this paper, we evaluate the textual information from the YELP review dataset and try discover the hidden pattern or message inside it. We applied a machine learning techniques such as `Naive Bayes` to learn from the word vector which capture the sentiment from each reviewer in relation with other factor from the dataset. We mainly focus our discovery towards the reviews of the restaurant in major areas of Las Vegas.*
 
 
 # Keywords
-Urban design, social media, geo-location, lexicographic analysis, sentiment analysis
+Social media, geo-location, sentiment analysis
 
 ```{r , echo=FALSE , message=F, warning=F}
 assign("last.warning", NULL, envir = baseenv())
@@ -46,8 +46,7 @@ suppressWarnings(suppressMessages(library(Hmisc)))
 
 # Introduction
 
-The evaluation is about the sentiment analysis over the review and stars rating restaurant in the Last Vegas city.. The YELP dataset is very resourceful which provides the valuation criteria over 61,184  unique records for `business` , 1,569,264 records for `review` and 495,107 records for the `tips`. Two tables have been discarded for now ,which is `user` details and the `check-in` information.The GPS longitude and latitude available inside the `business` dataset which provides very useful information about its geolocation. The star value gives the feedback from the customer which might be `positive` , `negative` or `neutral`.
-The findings offer exemplary `big data` analysis methods as the evaluation of socially mediated urban space associated with the pattern classification of textual information inside the `reviews` and `tips` in relation with `business` dataset.
+The evaluation is about the sentiment analysis over the YELP reviews and tips about restaurants in the Last Vegas city.The YELP dataset is very resourceful which provides the valuation criteria over 61,184  unique records for `business` , 1,569,264 records for `review` and 495,107 records for the `tips`. Two tables have been discarded for now ,which is `user` details and the `check-in` information.The GPS longitude and latitude available in the `business` dataset provides very useful information about its geo-location. The reviews and tips value contains `positive`, negative or neutral feedback from the customer.The findings offer exemplary `big data` analysis methods as the evaluation of socially mediated urban space associated with the pattern classification of textual information inside the `reviews` and `tips` in relation with the `business` dataset.
 
 ```{r , echo=FALSE }
 df <- read.csv("a.csv")
@@ -56,21 +55,21 @@ df <- read.csv("a.csv")
 #conn, "select  review_count , categories , city from business group by review_count , categories , city order by review_count desc")
 ```
 
-`Las Vegas` City is the top 5 locations with the most review counted as follows :-
+Which city is the top 5 locations with the most review counted ?
 
 
 ```{r echo=FALSE}
 panderOptions("digits", 2)
-pander(head(df),caption = "Top 5 City Reviews and Categories")
+pander(head(df),caption = "Top 5 City Reviews and Categories - Las Vegas")
 
 ```
 
-In more details , `Mon Ami Gabi` is the top of 5 `Las Vegas` restaurant by the most reviewed counted as follows :-
+Which restaurant is the most reviewed counted ?
 
 ```{r echo=FALSE , fig.height=3 , fig.align='center' , message=F, warning=F}
 df <- read.csv("d.csv") 
 panderOptions("digits", 2)
-pander(head(df),caption = "Las Vegas City Restaurant")
+pander(head(df),caption = "Top 5 Las Vegas City Restaurant - Mon Ami Gabi")
 
 ```
 
@@ -93,18 +92,19 @@ pander(summary(df1$review_count),caption = "Summary of Las Vegas City Restaurant
 
 ```
 
-To reduce the size of the sample , average size of numbers of message is the minimal size which is around 390. And the numbers of group identified around 1000 
+To reduce the size of the sample , average size of numbers of the message is the minimal size which is around 390. And the numbers of the group identified around 1000 
 
 From the summary show that the Median is `26` and we choose `26` as the minimal sample for this evaluation. The median better than mean because of it is a symmetrical statistic and more resistant to errors.
 
 # Methods and Data 
 
-The dataset is obtained from the YELP website (http://www.yelp.com/dataset_challenge) and extracted. The format for the dataset is in `JSON` . JSON need special techniques to parse and read from it. Apache Hive is the best component which is capable read this format . Since the dataset required to have a good machine in term of CPU and memory , we push this dataset to work inside Hadoop which Map-Reduce can be used as the framework for the filtering and cleaning over large size of the dataset. Hive is compatible to use scripting parameter similar to SQL and this is very suitable for speed up the entire development work. Hive also support for the complex data type and  `STRUCT` is used to handle the JSON complex type for the table creation inside Hive .
+The dataset is obtained from the YELP website (http://www.yelp.com/dataset_challenge) and extracted. The format for the dataset is in `JSON` . JSON need special techniques to parse and read from it. Apache Hive is the best component which is capable read this format . Since the dataset required to have a good machine in term of CPU and memory , we push this dataset to work inside Hadoop which Map-Reduce can be used as the framework for the filtering and cleaning over large size of the dataset. Hive is compatible to use scripting parameter similar to SQL and this is very suitable for speed up the entire development work. Hive also support for the complex data type and  `STRUCT` is used to handle the JSON complex type for the table creation inside Hive . All the reviews and tips messages is filtered by removing the `numbers`,`symbols` and `unnecessary spaces` using R.
 
-For the basic analysis , this evaluation requires a fair amount time to know about the dataset abd performaing exploratory analysis. But, now we only focus on the textual information which mostly inside the `review` and `tips` dataset in conjuction with the `business` and `user` information. This will tackle some of the questions such as :-
+For the basic analysis , this evaluation requires a fair amount time to know about the dataset by performing exploratory analysis. But, now we only focus on the textual information which mostly inside the `review` and `tips` dataset in conjunction with the `business` and `user` information. This will tackle some of the questions such as :-
 
-* What is the emotion type that might contain inside the review and tips messages ?
-* What is the most frequent words or terms inside it ?
+* What is the `emotion type` that might contain inside the review and tips messages ?
+* What is the `most frequent words` or terms inside it ?
+* What is the impact to the ratings by `negative` , `positive` or `neutral` polarity ? 
 
 Below is the answers for the questions above . Top common words inside the review is regarding the `good food , good places` and also a `good services `. Reviewers whom visits seems very happy about the quality of food , services and places restaurant in Las Vegas. Most of the comments seems positively accepts it.
 
@@ -133,11 +133,11 @@ removeNumbers = TRUE, tolower = TRUE
 m <- as.matrix(tdm)
 v <- sort(rowSums(m), decreasing = TRUE)
 
-class_emo = classify_emotion(df_review$review[1:10], algorithm = "bayes", prior =
+class_emo = classify_emotion(df_review$review, algorithm = "bayes", prior =
 1.0)
 emotion = class_emo[,7]
 emotion[is.na(emotion)] = "unknown"
-class_pol = classify_polarity(df_review$review[1:10], algorithm = "bayes")
+class_pol = classify_polarity(df_review$review, algorithm = "bayes")
 # get polarity best fit
 polarity = class_pol[,4]
 pct <-
@@ -159,7 +159,7 @@ table(as.data.frame(class_pol)$BEST_FIT) / length(as.data.frame(class_pol)$BEST_
 
 * Food Selection  & Emotion Discovery 
 
-To discover what types of food been reviewed most by the reviewer , `word-cloud` plot is used to splot the word frequencies. Since to have the food-list dataset is hard to compile due to there is a lot of food around the world , by plotting it into word cloud we easily can identify manually pick the food that we recognize as follows :- 
+To discover what types of food have been reviewed most by the reviewer, the `word-cloud` plot is used to split the word frequencies. Since having the food-list dataset is hard to compile due to there is a lot of food around the world, by plotting it into word cloud we cane asily identify manually pick the food that we recognize as follows :- 
 
 ```{r echo=FALSE , fig.height=3 , fig.align='center' , message=F, warning=F}
 df_review <- read.csv("f.csv")
@@ -190,7 +190,7 @@ dm = data.frame(word=names(word_freqs), freq=word_freqs)
 suppressWarnings(suppressMessages(wordcloud(dm$word[1:500], dm$freq[1:500], random.order=FALSE, colors=brewer.pal(8, "Dark2"))))
 ```
 
-From the above information we can make the assumption that the result shows the common food that always mention by the reviewer are `chicken` , `sushi` , `burger` , `pizza` , `tuna` , `salad` , `rice` ,  `shrip` , etc. We use this list as the base of common food can be relate with the emotion of the reviewer. List of emotions that can be identified, such as `love`, `good`, `best`, `great`, `nice`, etc. Seems like this kind of food appear many times and the Last Vegas visitors or reviewer pretty happy with it. Some class type of food origin found in the list such as `Italian`, `Japanese` and `American` cuisine. 
+From the above information we can make the assumption that the result shows the common food that always mention by the reviewer are `chicken` , `sushi` , `burger` , `pizza` , `tuna` , `salad` , `rice` ,  `shrimp` , etc. We use this list as the base of common food can be relate with the emotion of the reviewer. List of emotions that can be identified, such as `love`, `good`, `best`, `great`, `nice`, etc. Seems like this kind of food appear many times and the Last Vegas visitors or reviewer pretty happy with it. Some class type of food origin found in the list such as `Italian`, `Japanese` and `American` , etc. cuisine. 
 
 ```{r echo=FALSE , fig.height=5 , fig.align='center' , message=F, warning=F}
 
@@ -264,14 +264,10 @@ From the above information we can make the assumption that the result shows the 
 # The graph shows that there is a few groups of words which their possible relationship and have the idea of the main term used.
 ```
 
+Other interesting findings in this evaluation is to classify the reviewer's ratings and the tips provided. The idea is to calculate the sentiment score for each message so we can know how positive and negative the messages. Below is the formula of the how to calculate the score opinion :-
 
+$$Score = \sum_{i=1}^n NumbersOfPositiveWords  {-}  \sum_{i=1}^n NumbersOfNegativeWords$$  
 
-Other interesting findings in this evaluation is to classify the reviewers ratings and the tips provided. The idea is to calculate the sentimen score for each messages so we can know how positive and negative the messages. Below is the formula of the how to calculate the score :-
-
-```
-      Score  =  Number of positive words  -  Number of negative words`
-
-```
 * If the `score > 0` , the messages has overall `positive` opinion
 * If the `score < 0` , the messages has overall `negative` opinion
 * If the `score = 0` , the messages has can be consider as `neutral` opinion
@@ -339,7 +335,7 @@ mapImageData1 <-
 
 The red area is the central area of the review messages is focusing on. Major comments all over the year since 2004 is focused in that area. The location seems very strategic and it is only 2.5 miles from the `McCarran International Airport`. Most people will stay in this area and enjoyed the food before they have their flight or after they arrive here.
 
-From the random sample of the Las Vegas dataset which taken 10% of the total sample for analysis, we found that more than 70% are happy `(joy)` emotion with the services, smaller portion are unhappy `(sadness, anger, fear)` emotion. The `(unknown)` emotion still needs deeper analysis to increase accuracy of the emotion classification.This smaller sample used due to limitation of machine memory to process
+From the sample of the Las Vegas dataset , we found that more than 70% are happy `(joy)` emotion with the services, smaller portion are unhappy `(sadness, anger, fear)` emotion. The `(unknown)` emotion still needs deeper analysis to increase accuracy of the emotion classification.This smaller sample used due to limitation of machine memory to process
 
 A `Naive Bayes` algorithm classifies each review message into subjectivity and polarity from the input. A subjectivity indicates the words are strongly or weakly subjective and the polarity indicates the weather the words are expressing a positive or negative sentiment. The illustration & table below shows the summary:-
 
